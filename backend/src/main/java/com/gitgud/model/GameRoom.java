@@ -7,16 +7,15 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GameRoom {
 
     private final String code;
-    private final String hostSessionId;
+    private String hostSessionId;
     private GameState state;
     private List<Question> questions;
     private int currentQuestionIndex;
 
     private final ConcurrentHashMap<String, Player> players;
 
-    public GameRoom(String code, String hostSessionId) {
+    public GameRoom(String code) {
         this.code = code;
-        this.hostSessionId = hostSessionId;
         this.state = GameState.LOBBY;
         this.questions = new ArrayList<>();
         this.currentQuestionIndex = 0;
@@ -51,6 +50,20 @@ public class GameRoom {
 
     public void removePlayer(String sessionId) {
         players.remove(sessionId);
+    }
+
+    public synchronized void assignHostIfAbsent(String sessionId) {
+        if (hostSessionId == null) {
+            hostSessionId = sessionId;
+        }
+    }
+
+    public synchronized void promoteNewHost() {
+        hostSessionId = players.keySet().stream().findFirst().orElse(null);
+    }
+
+    public boolean isHost(String sessionId) {
+        return hostSessionId != null && hostSessionId.equals(sessionId);
     }
 
     public String getCode() { return code; }
