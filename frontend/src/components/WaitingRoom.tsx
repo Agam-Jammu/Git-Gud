@@ -1,5 +1,7 @@
+import { motion } from "motion/react";
 import { useState } from "react";
 
+import { fadeRise, liftOnHover, staggerContainer, staggerItem } from "../motion/presets";
 import type { PlayerDto } from "../types";
 
 export interface WaitingRoomProps {
@@ -33,43 +35,63 @@ export function WaitingRoom({
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 p-8">
-      <header className="text-center">
+      <motion.header
+        className="text-center"
+        variants={fadeRise}
+        initial="hidden"
+        animate="visible"
+      >
         <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Room code</p>
-        <h1 className="text-5xl font-bold tracking-[0.3em] text-arena-accent">{roomCode}</h1>
-      </header>
+        <h1 className="cat-gradient-text mt-2 text-5xl font-bold tracking-[0.3em]">{roomCode}</h1>
+      </motion.header>
 
-      <div className="flex w-full max-w-sm items-center gap-2">
+      <motion.div
+        className="cat-panel flex w-full max-w-sm items-center gap-2 p-3"
+        variants={fadeRise}
+        initial="hidden"
+        animate="visible"
+      >
         <input
           aria-label="Share link"
           readOnly
           value={shareUrl}
-          className="flex-1 rounded-md border border-arena-border bg-arena-background px-3 py-2 text-sm text-slate-300 outline-none"
+          className="flex-1 rounded-md border border-arena-border bg-arena-background/70 px-3 py-2 text-sm text-slate-300 outline-none"
         />
-        <button
+        <motion.button
           type="button"
           onClick={() => void copyLink()}
-          className="rounded-md border border-arena-accent px-3 py-2 text-sm font-semibold text-arena-accent"
+          className="sheen cat-fill rounded-md px-3 py-2 text-sm font-semibold text-arena-background"
+          {...liftOnHover}
         >
           {copied ? "Copied" : "Copy link"}
-        </button>
-      </div>
+        </motion.button>
+      </motion.div>
 
-      <section className="w-full max-w-sm rounded-xl border border-arena-border bg-arena-surface p-6">
-        <h2 className="text-sm uppercase tracking-widest text-slate-400">
+      <motion.section
+        className="cat-panel w-full max-w-sm p-6"
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.h2
+          className="text-sm uppercase tracking-widest text-slate-400"
+          variants={staggerItem}
+        >
           Players ({players.length})
-        </h2>
+        </motion.h2>
 
         <ul className="mt-4 flex flex-col gap-2">
           {players.map((player, index) => (
-            <li
+            <motion.li
               key={`${index}-${player.name}`}
+              variants={staggerItem}
               className="flex items-center justify-between rounded-md border border-arena-border px-3 py-2"
             >
               <span className="text-slate-100">{player.name}</span>
               {player.host ? (
                 <span className="text-xs uppercase tracking-widest text-arena-accent">Host</span>
               ) : null}
-            </li>
+            </motion.li>
           ))}
         </ul>
 
@@ -80,18 +102,19 @@ export function WaitingRoom({
             {error}
           </p>
         ) : null}
-      </section>
+      </motion.section>
 
       <div className="flex flex-col items-center gap-3">
         {isHost ? (
-          <button
+          <motion.button
             type="button"
             onClick={onStart}
             disabled={!connected}
-            className="rounded-md bg-arena-accent px-6 py-2 font-semibold text-arena-background disabled:opacity-40"
+            className="sheen cat-fill rounded-md px-6 py-2 font-semibold text-arena-background disabled:opacity-60"
+            {...liftOnHover}
           >
             Start match
-          </button>
+          </motion.button>
         ) : (
           <p className="text-sm text-slate-400">Waiting for the host to start the match</p>
         )}
