@@ -11,6 +11,7 @@ public class GameRoom {
     private GameState state;
     private List<Question> questions;
     private int currentQuestionIndex;
+    private long questionDeadlineEpochMs;
 
     private final ConcurrentHashMap<String, Player> players;
 
@@ -73,6 +74,10 @@ public class GameRoom {
     public List<Question> getQuestions() { return questions; }
     public void setQuestions(List<Question> questions) { this.questions = questions; }
     public int getCurrentQuestionIndex() { return currentQuestionIndex; }
+    public long getQuestionDeadlineEpochMs() { return questionDeadlineEpochMs; }
+    public void setQuestionDeadlineEpochMs(long questionDeadlineEpochMs) {
+        this.questionDeadlineEpochMs = questionDeadlineEpochMs;
+    }
     public ConcurrentHashMap<String, Player> getPlayers() { return players; }
 }
 

@@ -3,10 +3,12 @@ package com.gitgud.controller;
 import com.gitgud.dto.JoinRoomRequest;
 import com.gitgud.dto.PlayerDto;
 import com.gitgud.dto.PlayerMapper;
+import com.gitgud.dto.SubmitAnswerRequest;
 import com.gitgud.dto.events.GameEventDto;
 import com.gitgud.dto.events.GameEventType;
 import com.gitgud.dto.events.PlayerJoinedPayload;
 import com.gitgud.dto.events.PlayerLeftPayload;
+import com.gitgud.engine.GameEngineService;
 import com.gitgud.model.Player;
 import com.gitgud.service.RoomService;
 import jakarta.validation.Valid;
@@ -24,9 +26,11 @@ import java.util.Optional;
 public class GameWsController {
 
     private final RoomService roomService;
+    private final GameEngineService gameEngineService;
 
-    public GameWsController(RoomService roomService) {
+    public GameWsController(RoomService roomService, GameEngineService gameEngineService) {
         this.roomService = roomService;
+        this.gameEngineService = gameEngineService;
     }
 
     @MessageMapping("/room/{code}/join")
@@ -45,6 +49,13 @@ public class GameWsController {
         Optional<Player> departed = roomService.leave(code, requireSessionId(headers));
         return new GameEventDto(GameEventType.PLAYER_LEFT,
                 new PlayerLeftPayload(playerNameOrNull(departed), roster(code)));
+    }
+
+    @MessageMapping("/room/{code}/answer")
+    public void answer(@DestinationVariable String code,
+                       @Valid @Payload SubmitAnswerRequest request,
+                       SimpMessageHeaderAccessor headers) {
+        gameEngineService.submitAnswer(code, requireSessionId(headers), request);
     }
 
     private List<PlayerDto> roster(String code) {

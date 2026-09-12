@@ -97,7 +97,7 @@ public class RoomService {
         return Optional.ofNullable(removed);
     }
 
-    private GameRoom require(String code) {
+    public GameRoom require(String code) {
         return find(code).orElseThrow(() -> new RoomNotFoundException(code));
     }
 
