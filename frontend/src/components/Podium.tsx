@@ -41,7 +41,7 @@ export function Podium({ standings, playerName, isHost, onPlayAgain, onLeave }: 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 p-8">
       <header className="text-center">
-        <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Final results</p>
+        <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Final results</p>
         <h1 className="cat-gradient-text mt-2 text-5xl font-bold">
           {winner ? `${winner.name} wins` : "No players"}
         </h1>
@@ -77,7 +77,7 @@ export function Podium({ standings, playerName, isHost, onPlayAgain, onLeave }: 
                   {player.name}
                 </span>
                 {player.name === playerName ? (
-                  <span className="text-xs uppercase tracking-widest text-slate-500">You</span>
+                  <span className="text-xs uppercase tracking-widest text-slate-400">You</span>
                 ) : null}
               </span>
 

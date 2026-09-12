@@ -34,7 +34,7 @@ export function PracticeScreen() {
   if (practice.finished) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-8">
-        <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Practice complete</p>
+        <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Practice complete</p>
         <h1 className="text-4xl font-semibold text-arena-accent">
           {practice.correctCount} / {practice.total}
         </h1>
@@ -72,7 +72,7 @@ export function PracticeScreen() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 p-8">
       <header className="flex w-full max-w-2xl items-center justify-between">
-        <p className="text-xs uppercase tracking-[0.3em] text-slate-500">
+        <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
           Question {practice.index + 1} of {practice.total}
         </p>
         <p className="text-sm text-slate-400">
