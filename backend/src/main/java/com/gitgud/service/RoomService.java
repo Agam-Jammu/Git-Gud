@@ -50,16 +50,20 @@ public class RoomService {
         return room;
     }
 
-    public void leave(String code, String sessionId) {
-        find(code).ifPresent(room -> {
-            boolean hostLeft = room.isHost(sessionId);
-            room.removePlayer(sessionId);
-            if (room.getPlayers().isEmpty()) {
-                rooms.remove(room.getCode());
-            } else if (hostLeft) {
-                room.promoteNewHost();
-            }
-        });
+    public Optional<Player> leave(String code, String sessionId) {
+        Optional<GameRoom> found = find(code);
+        if (found.isEmpty()) {
+            return Optional.empty();
+        }
+
+        GameRoom room = found.get();
+        Player removed = room.removePlayer(sessionId);
+        if (room.getPlayers().isEmpty()) {
+            rooms.remove(room.getCode());
+        } else if (removed != null && room.isHost(sessionId)) {
+            room.promoteNewHost();
+        }
+        return Optional.ofNullable(removed);
     }
 
     public GameRoom start(String code, String sessionId) {

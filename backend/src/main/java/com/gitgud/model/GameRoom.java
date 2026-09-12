@@ -48,8 +48,8 @@ public class GameRoom {
         players.put(player.getSessionId(), player);
     }
 
-    public void removePlayer(String sessionId) {
-        players.remove(sessionId);
+    public Player removePlayer(String sessionId) {
+        return players.remove(sessionId);
     }
 
     public synchronized void assignHostIfAbsent(String sessionId) {
