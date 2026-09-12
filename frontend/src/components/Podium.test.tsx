@@ -13,6 +13,8 @@ function renderPodium(overrides: Partial<PodiumProps> = {}) {
   const props: PodiumProps = {
     standings: [ALEX, SAM, CASEY],
     playerName: "Sam",
+    isHost: true,
+    onPlayAgain: vi.fn(),
     onLeave: vi.fn(),
     ...overrides,
   };
@@ -75,6 +77,22 @@ describe("podium", () => {
 
     expect(screen.getByRole("heading", { name: "No players" })).toBeInTheDocument();
     expect(standingRows()).toHaveLength(0);
+  });
+
+  it("lets the host start a rematch", async () => {
+    const user = userEvent.setup();
+    const props = renderPodium();
+
+    await user.click(screen.getByRole("button", { name: "Play again" }));
+
+    expect(props.onPlayAgain).toHaveBeenCalledOnce();
+  });
+
+  it("tells a guest to wait for the host", () => {
+    renderPodium({ isHost: false });
+
+    expect(screen.queryByRole("button", { name: "Play again" })).not.toBeInTheDocument();
+    expect(screen.getByText("Waiting for the host to start a rematch")).toBeInTheDocument();
   });
 
   it("leaves the room", async () => {

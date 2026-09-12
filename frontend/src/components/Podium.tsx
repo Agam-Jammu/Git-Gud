@@ -3,6 +3,8 @@ import type { PlayerDto } from "../types";
 export interface PodiumProps {
   standings: PlayerDto[];
   playerName: string | null;
+  isHost: boolean;
+  onPlayAgain: () => void;
   onLeave: () => void;
 }
 
@@ -25,7 +27,7 @@ export function ordinal(position: number): string {
   }
 }
 
-export function Podium({ standings, playerName, onLeave }: PodiumProps) {
+export function Podium({ standings, playerName, isHost, onPlayAgain, onLeave }: PodiumProps) {
   const winner = standings[0];
 
   return (
@@ -66,13 +68,23 @@ export function Podium({ standings, playerName, onLeave }: PodiumProps) {
         ))}
       </ol>
 
-      <button
-        type="button"
-        onClick={onLeave}
-        className="rounded-md border border-arena-accent px-6 py-2 font-semibold text-arena-accent"
-      >
-        Leave room
-      </button>
+      <div className="flex flex-col items-center gap-3">
+        {isHost ? (
+          <button
+            type="button"
+            onClick={onPlayAgain}
+            className="rounded-md bg-arena-accent px-6 py-2 font-semibold text-arena-background"
+          >
+            Play again
+          </button>
+        ) : (
+          <p className="text-sm text-slate-400">Waiting for the host to start a rematch</p>
+        )}
+
+        <button type="button" onClick={onLeave} className="text-sm text-slate-400 underline">
+          Leave room
+        </button>
+      </div>
     </main>
   );
 }

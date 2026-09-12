@@ -174,6 +174,14 @@ describe("game session", () => {
       sockets[0]?.emit({ type: "GAME_OVER", payload: { standings: [ALEX, SAM] } });
     });
     expect(result.current.phase).toBe("gameOver");
+
+    act(() => {
+      sockets[0]?.emit({ type: "COUNTDOWN_TICK", payload: { secondsRemaining: 3 } });
+    });
+    expect(result.current.phase).toBe("countdown");
+    expect(result.current.roundResult).toBeNull();
+    expect(result.current.selectedOptionIndex).toBeNull();
+    expect(result.current.question).toBeNull();
   });
 
   it("adopts the scoreboard from a round result", async () => {

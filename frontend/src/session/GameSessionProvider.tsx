@@ -65,7 +65,14 @@ function applyEvent(state: SessionState, event: GameEvent): SessionState {
     case "PLAYER_LEFT":
       return { ...next, players: event.payload.players };
     case "COUNTDOWN_TICK":
-      return { ...next, phase: "countdown", countdownSeconds: event.payload.secondsRemaining };
+      return {
+        ...next,
+        phase: "countdown",
+        countdownSeconds: event.payload.secondsRemaining,
+        question: null,
+        selectedOptionIndex: null,
+        roundResult: null,
+      };
     case "QUESTION_START":
       return {
         ...next,

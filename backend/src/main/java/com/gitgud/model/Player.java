@@ -36,6 +36,12 @@ public class Player {
         this.answeredCurrentQuestion = false;
     }
 
+    public void resetForMatch() {
+        this.score = 0;
+        this.streak = 0;
+        this.answeredCurrentQuestion = false;
+    }
+
     public String getSessionId() { return sessionId; }
     public String getName() { return name; }
     public int getScore() { return score; }

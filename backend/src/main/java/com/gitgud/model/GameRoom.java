@@ -36,6 +36,16 @@ public class GameRoom {
         return currentQuestionIndex < questions.size();
     }
 
+    public synchronized void resetForRematch() {
+        state = GameState.LOBBY;
+        questions = new ArrayList<>();
+        currentQuestionIndex = 0;
+        questionDeadlineEpochMs = 0;
+        for (Player player : players.values()) {
+            player.resetForMatch();
+        }
+    }
+
     public boolean allPlayersAnswered() {
         for (Player player : players.values()) {
             if (!player.hasAnswered()) {

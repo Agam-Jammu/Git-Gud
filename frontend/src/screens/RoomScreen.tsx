@@ -70,6 +70,8 @@ export function RoomScreen() {
       <Podium
         standings={players}
         playerName={playerName}
+        isHost={isHost}
+        onPlayAgain={session.startMatch}
         onLeave={() => {
           void session.leaveRoom();
         }}

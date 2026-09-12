@@ -160,6 +160,7 @@ describe("room screen", () => {
     expect(rows[0]).toHaveTextContent("3,000");
     expect(rows[1]).toHaveTextContent("Sam");
     expect(rows[1]).toHaveTextContent("You");
+    expect(screen.getByRole("button", { name: "Play again" })).toBeInTheDocument();
   });
 
   it("shows a join failure through the prompt", () => {

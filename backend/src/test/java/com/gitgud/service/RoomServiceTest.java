@@ -134,6 +134,43 @@ class RoomServiceTest {
     }
 
     @Test
+    void hostCanStartARematchOnceTheGameIsOver() {
+        GameRoom room = roomService.create();
+        roomService.join(room.getCode(), "session-1", "Alex");
+        roomService.join(room.getCode(), "session-2", "Sam");
+        roomService.start(room.getCode(), "session-1");
+
+        for (var player : room.getPlayers().values()) {
+            player.addScore(1_250);
+            player.incrementStreak();
+            player.markAnswered();
+        }
+        room.advanceQuestion();
+        room.setState(GameState.GAME_OVER);
+
+        GameRoom restarted = roomService.start(room.getCode(), "session-1");
+
+        assertEquals(GameState.COUNTDOWN, restarted.getState());
+        assertEquals(0, restarted.getCurrentQuestionIndex());
+        assertTrue(restarted.getQuestions().isEmpty());
+        assertEquals(0, restarted.getPlayers().get("session-1").getScore());
+        assertEquals(0, restarted.getPlayers().get("session-1").getStreak());
+        assertTrue(!restarted.allPlayersAnswered());
+    }
+
+    @Test
+    void aNonHostCannotStartARematch() {
+        GameRoom room = roomService.create();
+        roomService.join(room.getCode(), "session-1", "Alex");
+        roomService.join(room.getCode(), "session-2", "Sam");
+        roomService.start(room.getCode(), "session-1");
+        room.setState(GameState.GAME_OVER);
+
+        assertThrows(IllegalStateException.class, () -> roomService.start(room.getCode(), "session-2"));
+        assertEquals(GameState.GAME_OVER, room.getState());
+    }
+
+    @Test
     void playersCannotJoinAfterTheMatchStarts() {
         GameRoom room = roomService.create();
         roomService.join(room.getCode(), "session-1", "Alex");

@@ -75,6 +75,9 @@ public class RoomService {
         if (!room.isHost(sessionId)) {
             throw new IllegalStateException("only the host can start the match");
         }
+        if (room.getState() == GameState.GAME_OVER) {
+            room.resetForRematch();
+        }
         if (room.getState() != GameState.LOBBY) {
             throw new IllegalStateException("room " + room.getCode() + " has already started");
         }
