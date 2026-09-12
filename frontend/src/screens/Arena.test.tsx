@@ -58,4 +58,31 @@ describe("arena", () => {
     expect(screen.getByRole("button", { name: "map" })).toBeDisabled();
     expect(props.onSelect).not.toHaveBeenCalled();
   });
+
+  it("themes the screen with the accent of the question category", () => {
+    renderArena();
+
+    const style = screen.getByRole("main").getAttribute("style") ?? "";
+
+    expect(style).toContain("--cat-accent-rgb");
+    expect(style).toContain("167 139 250");
+  });
+
+  it("keeps the timer on the category colour above three seconds", () => {
+    renderArena({ secondsRemaining: 8 });
+
+    const timer = screen.getByLabelText("Seconds remaining");
+
+    expect(timer).toHaveClass("cat-accent-text");
+    expect(timer).not.toHaveClass("text-arena-wrong");
+  });
+
+  it("turns the timer urgent at three seconds or less", () => {
+    renderArena({ secondsRemaining: 3 });
+
+    const timer = screen.getByLabelText("Seconds remaining");
+
+    expect(timer).toHaveClass("text-arena-wrong");
+    expect(timer).toHaveClass("animate-pulse");
+  });
 });
