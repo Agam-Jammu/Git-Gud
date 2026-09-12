@@ -85,7 +85,11 @@ class GameFlowIntegrationTest {
         alex.send("/app/room/" + code + "/join", joinRequest("Alex"));
         awaitEvent(events, GameEventType.PLAYER_JOINED);
         sam.send("/app/room/" + code + "/join", joinRequest("Sam"));
-        awaitEvent(events, GameEventType.PLAYER_JOINED);
+        GameEventDto roster = awaitEvent(events, GameEventType.PLAYER_JOINED);
+
+        List<?> joinedPlayers = (List<?>) Objects.requireNonNull(payload(roster).get("players"));
+        assertEquals(2, joinedPlayers.size());
+        assertEquals(1, hostCount(joinedPlayers), "exactly one player should be flagged as host");
 
         alex.send("/app/room/" + code + "/start", new byte[0]);
         awaitEvent(events, GameEventType.COUNTDOWN_TICK);
@@ -176,6 +180,16 @@ class GameFlowIntegrationTest {
 
     private Map<?, ?> payload(GameEventDto event) {
         return (Map<?, ?>) Objects.requireNonNull(event.payload());
+    }
+
+    private long hostCount(List<?> players) {
+        long hosts = 0;
+        for (Object player : players) {
+            if (Boolean.TRUE.equals(((Map<?, ?>) player).get("host"))) {
+                hosts++;
+            }
+        }
+        return hosts;
     }
 
     private JoinRoomRequest joinRequest(String playerName) {

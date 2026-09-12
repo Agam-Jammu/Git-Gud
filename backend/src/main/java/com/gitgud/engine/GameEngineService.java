@@ -178,7 +178,7 @@ public class GameEngineService {
     private List<PlayerDto> standings(GameRoom room) {
         List<Player> ordered = new ArrayList<>(room.getPlayers().values());
         ordered.sort((first, second) -> Integer.compare(second.getScore(), first.getScore()));
-        return PlayerMapper.toDtos(ordered);
+        return PlayerMapper.toDtos(ordered, room.getHostSessionId());
     }
 
     private Player requirePlayer(GameRoom room, String sessionId) {

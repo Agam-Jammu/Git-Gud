@@ -37,7 +37,6 @@ public class RoomController {
     @GetMapping("/{code}")
     public RoomStatusDto status(@PathVariable String code) {
         GameRoom room = roomService.require(code);
-        return new RoomStatusDto(room.getCode(), room.getState(),
-                PlayerMapper.toDtos(roomService.players(room.getCode())));
+        return new RoomStatusDto(room.getCode(), room.getState(), PlayerMapper.toDtos(room));
     }
 }

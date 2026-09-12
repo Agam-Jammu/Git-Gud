@@ -3,7 +3,6 @@ package com.gitgud.service;
 import com.gitgud.exception.RoomNotFoundException;
 import com.gitgud.model.GameRoom;
 import com.gitgud.model.GameState;
-import com.gitgud.model.Player;
 import com.gitgud.util.RoomCodeGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -146,22 +145,6 @@ class RoomServiceTest {
     @Test
     void startingAnUnknownRoomThrows() {
         assertThrows(RoomNotFoundException.class, () -> roomService.start("ZZZZZZ", "session-1"));
-    }
-
-    @Test
-    void playersListsTheCurrentRoster() {
-        GameRoom room = roomService.create();
-        roomService.join(room.getCode(), "session-1", "Alex");
-
-        List<Player> players = roomService.players(room.getCode());
-
-        assertEquals(1, players.size());
-        assertEquals("Alex", players.get(0).getName());
-    }
-
-    @Test
-    void playersIsEmptyForAnUnknownRoom() {
-        assertTrue(roomService.players("ZZZZZZ").isEmpty());
     }
 
     @Test

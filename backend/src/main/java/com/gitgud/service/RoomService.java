@@ -70,11 +70,6 @@ public class RoomService {
         return departures;
     }
 
-    public List<Player> players(String code) {
-        Optional<GameRoom> room = find(code);
-        return room.isEmpty() ? List.of() : List.copyOf(room.get().getPlayers().values());
-    }
-
     public GameRoom start(String code, String sessionId) {
         GameRoom room = require(code);
         if (!room.isHost(sessionId)) {
