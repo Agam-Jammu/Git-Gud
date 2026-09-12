@@ -1,4 +1,5 @@
 import type { PlayerDto, QuestionDto } from "../types";
+import { optionOutcome, optionOutcomeClass } from "./optionOutcome";
 
 export interface RoundRevealProps {
   question: QuestionDto | null;
@@ -6,16 +7,6 @@ export interface RoundRevealProps {
   explanation: string;
   scoreboard: PlayerDto[];
   selectedOptionIndex: number | null;
-}
-
-function optionClass(index: number, correctOptionIndex: number, selectedOptionIndex: number | null): string {
-  if (index === correctOptionIndex) {
-    return "border-arena-correct text-arena-correct";
-  }
-  if (index === selectedOptionIndex) {
-    return "border-arena-wrong text-arena-wrong";
-  }
-  return "border-arena-border text-slate-400";
 }
 
 export function RoundReveal({
@@ -51,10 +42,8 @@ export function RoundReveal({
             {question.options.map((option, index) => (
               <li
                 key={`${index}-${option}`}
-                className={`rounded-md border px-4 py-3 ${optionClass(
-                  index,
-                  correctOptionIndex,
-                  selectedOptionIndex,
+                className={`rounded-md border px-4 py-3 ${optionOutcomeClass(
+                  optionOutcome(index, correctOptionIndex, selectedOptionIndex),
                 )}`}
               >
                 {option}

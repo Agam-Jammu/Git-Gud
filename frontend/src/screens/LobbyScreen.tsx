@@ -108,6 +108,14 @@ export function LobbyScreen() {
           </p>
         ) : null}
       </div>
+
+      <button
+        type="button"
+        onClick={() => navigate("/practice")}
+        className="text-sm text-slate-400 underline"
+      >
+        Practise on your own
+      </button>
     </main>
   );
 }
