@@ -92,6 +92,32 @@ describe("game session", () => {
     expect(result.current.players).toEqual([ALEX, SAM]);
   });
 
+  it("reports the local player as host when the roster flags them", async () => {
+    const { result, sockets } = setUp(apiWith());
+    await act(async () => {
+      await result.current.createRoom("Alex");
+    });
+
+    act(() => {
+      sockets[0]?.emit({ type: "PLAYER_JOINED", payload: { playerName: "Alex", players: [ALEX] } });
+    });
+
+    expect(result.current.isHost).toBe(true);
+  });
+
+  it("does not report a guest as host", async () => {
+    const { result, sockets } = setUp(apiWith());
+    await act(async () => {
+      await result.current.createRoom("Sam");
+    });
+
+    act(() => {
+      sockets[0]?.emit({ type: "PLAYER_JOINED", payload: { playerName: "Sam", players: [ALEX, SAM] } });
+    });
+
+    expect(result.current.isHost).toBe(false);
+  });
+
   it("adopts the scoreboard from a round result", async () => {
     const { result, sockets } = setUp(apiWith());
     await act(async () => {

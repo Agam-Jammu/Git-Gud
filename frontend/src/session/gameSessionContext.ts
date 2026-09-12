@@ -6,6 +6,7 @@ export interface GameSession {
   roomCode: string | null;
   playerName: string | null;
   connected: boolean;
+  isHost: boolean;
   players: PlayerDto[];
   latestEvent: GameEvent | null;
   error: string | null;

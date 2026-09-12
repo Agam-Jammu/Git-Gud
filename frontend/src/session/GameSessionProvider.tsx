@@ -135,7 +135,17 @@ export function GameSessionProvider({
   );
 
   const value = useMemo<GameSession>(
-    () => ({ ...state, createRoom, joinRoom, leaveRoom, startMatch, submitAnswer }),
+    () => ({
+      ...state,
+      isHost:
+        state.playerName !== null &&
+        state.players.some((player) => player.name === state.playerName && player.host),
+      createRoom,
+      joinRoom,
+      leaveRoom,
+      startMatch,
+      submitAnswer,
+    }),
     [state, createRoom, joinRoom, leaveRoom, startMatch, submitAnswer],
   );
 
