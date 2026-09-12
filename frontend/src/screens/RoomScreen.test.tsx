@@ -45,8 +45,25 @@ describe("room screen", () => {
     renderRoom(sessionWith({ roomCode: null, players: [] }));
 
     expect(screen.getByRole("heading", { name: "ABC123" })).toBeInTheDocument();
-    expect(screen.getByText("Join this room from the lobby to take part.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Join this room" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Start match" })).not.toBeInTheDocument();
+  });
+
+  it("joins the room through the session", async () => {
+    const user = userEvent.setup();
+    const session = sessionWith({ roomCode: null, players: [] });
+    renderRoom(session);
+
+    await user.type(screen.getByLabelText("Your name"), "Casey");
+    await user.click(screen.getByRole("button", { name: "Join this room" }));
+
+    expect(session.joinRoom).toHaveBeenCalledWith("ABC123", "Casey");
+  });
+
+  it("shows a join failure through the prompt", () => {
+    renderRoom(sessionWith({ roomCode: null, players: [], error: "No room with code ABC123" }));
+
+    expect(screen.getByRole("alert")).toHaveTextContent("No room with code ABC123");
   });
 
   it("shows the waiting room once the player is in the room", () => {
