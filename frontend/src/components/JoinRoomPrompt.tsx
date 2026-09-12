@@ -25,7 +25,7 @@ export function JoinRoomPrompt({ roomCode, error, onJoin }: JoinRoomPromptProps)
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 p-8">
       <header className="text-center">
-        <p className="text-xs uppercase tracking-[0.3em] text-slate-500">You have been invited to</p>
+        <p className="text-xs uppercase tracking-[0.3em] text-slate-400">You have been invited to</p>
         <h1 className="text-5xl font-bold tracking-[0.3em] text-arena-accent">{roomCode}</h1>
       </header>
 
