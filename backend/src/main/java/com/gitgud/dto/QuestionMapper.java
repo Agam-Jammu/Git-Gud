@@ -13,4 +13,10 @@ public final class QuestionMapper {
         return new QuestionDto(question.getId(), question.getCategory(), question.getText(),
                 question.getCodeSnippet(), List.copyOf(question.getOptions()), deadlineEpochMs);
     }
+
+    public static PracticeQuestionDto toPracticeDto(Question question) {
+        return new PracticeQuestionDto(question.getId(), question.getCategory(), question.getText(),
+                question.getCodeSnippet(), List.copyOf(question.getOptions()),
+                question.getCorrectOptionIndex(), question.getExplanation());
+    }
 }
