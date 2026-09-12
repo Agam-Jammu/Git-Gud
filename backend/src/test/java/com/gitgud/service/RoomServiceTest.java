@@ -180,6 +180,36 @@ class RoomServiceTest {
     }
 
     @Test
+    void aNameCannotBeTakenTwiceInTheSameRoom() {
+        GameRoom room = roomService.create();
+        roomService.join(room.getCode(), "session-1", "Alex");
+
+        assertThrows(IllegalStateException.class, () -> roomService.join(room.getCode(), "session-2", "Alex"));
+        assertEquals(1, room.getPlayers().size());
+    }
+
+    @Test
+    void aNameIsTakenRegardlessOfCase() {
+        GameRoom room = roomService.create();
+        roomService.join(room.getCode(), "session-1", "Alex");
+
+        assertThrows(IllegalStateException.class, () -> roomService.join(room.getCode(), "session-2", "alex"));
+    }
+
+    @Test
+    void aNameFreedByLeavingCanBeTakenAgain() {
+        GameRoom room = roomService.create();
+        roomService.join(room.getCode(), "session-1", "Alex");
+        roomService.join(room.getCode(), "session-3", "Sam");
+
+        roomService.leave(room.getCode(), "session-1");
+
+        GameRoom rejoined = roomService.join(room.getCode(), "session-2", "Alex");
+
+        assertEquals(2, rejoined.getPlayers().size());
+    }
+
+    @Test
     void startingAnUnknownRoomThrows() {
         assertThrows(RoomNotFoundException.class, () -> roomService.start("ZZZZZZ", "session-1"));
     }

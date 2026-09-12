@@ -74,6 +74,12 @@ describe("waiting room", () => {
     expect(screen.getByText("Connecting to the room...")).toBeInTheDocument();
   });
 
+  it("shows a failure reported by the session", () => {
+    renderRoom({ error: "alex is already taken in this room" });
+
+    expect(screen.getByRole("alert")).toHaveTextContent("alex is already taken in this room");
+  });
+
   it("leaves the room", async () => {
     const user = userEvent.setup();
     const props = renderRoom();

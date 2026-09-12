@@ -7,11 +7,20 @@ export interface WaitingRoomProps {
   players: PlayerDto[];
   connected: boolean;
   isHost: boolean;
+  error?: string | null;
   onStart: () => void;
   onLeave: () => void;
 }
 
-export function WaitingRoom({ roomCode, players, connected, isHost, onStart, onLeave }: WaitingRoomProps) {
+export function WaitingRoom({
+  roomCode,
+  players,
+  connected,
+  isHost,
+  error,
+  onStart,
+  onLeave,
+}: WaitingRoomProps) {
   const [copied, setCopied] = useState(false);
   const shareUrl = `${window.location.origin}/room/${roomCode}`;
 
@@ -65,6 +74,12 @@ export function WaitingRoom({ roomCode, players, connected, isHost, onStart, onL
         </ul>
 
         {!connected ? <p className="mt-4 text-sm text-slate-400">Connecting to the room...</p> : null}
+
+        {error ? (
+          <p role="alert" className="mt-4 text-sm text-arena-wrong">
+            {error}
+          </p>
+        ) : null}
       </section>
 
       <div className="flex flex-col items-center gap-3">

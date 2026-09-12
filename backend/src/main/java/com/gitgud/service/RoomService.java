@@ -47,6 +47,9 @@ public class RoomService {
         if (room.getState() != GameState.LOBBY) {
             throw new IllegalStateException("room " + room.getCode() + " is no longer accepting players");
         }
+        if (room.hasPlayerNamed(playerName)) {
+            throw new IllegalStateException("room " + room.getCode() + " already has a player called " + playerName);
+        }
         room.addPlayer(new Player(sessionId, playerName));
         room.assignHostIfAbsent(sessionId);
         return room;

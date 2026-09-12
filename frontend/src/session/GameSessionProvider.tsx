@@ -11,6 +11,7 @@ import type {
   RoundResultDto,
 } from "../types";
 import { GameSessionContext, type GamePhase, type GameSession } from "./gameSessionContext";
+import { isNameTaken } from "./playerNames";
 
 export interface GameApi {
   createRoom: () => Promise<RoomCreatedResponse>;
@@ -147,7 +148,16 @@ export function GameSessionProvider({
   const joinRoom = useCallback(
     async (roomCode: string, playerName: string) => {
       try {
-        await api.fetchRoomStatus(roomCode);
+        const room = await api.fetchRoomStatus(roomCode);
+
+        if (isNameTaken(room.players, playerName)) {
+          setState((current) => ({
+            ...current,
+            error: `${playerName} is already taken in this room`,
+          }));
+          return;
+        }
+
         setState((current) => ({ ...current, roomCode, playerName, error: null }));
         connect(roomCode, playerName);
       } catch (error) {

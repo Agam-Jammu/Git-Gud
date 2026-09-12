@@ -63,6 +63,15 @@ public class GameRoom {
         return players.remove(sessionId);
     }
 
+    public boolean hasPlayerNamed(String name) {
+        for (Player player : players.values()) {
+            if (player.getName().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public synchronized void assignHostIfAbsent(String sessionId) {
         if (hostSessionId == null) {
             hostSessionId = sessionId;

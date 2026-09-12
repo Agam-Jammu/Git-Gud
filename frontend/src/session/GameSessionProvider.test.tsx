@@ -75,6 +75,25 @@ describe("game session", () => {
     expect(sockets).toHaveLength(0);
   });
 
+  it("refuses a name that is already taken in the room", async () => {
+    const api = apiWith({
+      fetchRoomStatus: vi.fn().mockResolvedValue({
+        code: "ABC123",
+        state: "LOBBY",
+        players: [{ name: "Alex", score: 0, streak: 0, answered: false, host: true }],
+      }),
+    });
+    const { result, sockets } = setUp(api);
+
+    await act(async () => {
+      await result.current.joinRoom("ABC123", "alex");
+    });
+
+    expect(result.current.error).toBe("alex is already taken in this room");
+    expect(result.current.roomCode).toBeNull();
+    expect(sockets).toHaveLength(0);
+  });
+
   it("tracks the roster from join and leave events", async () => {
     const { result, sockets } = setUp(apiWith());
     await act(async () => {

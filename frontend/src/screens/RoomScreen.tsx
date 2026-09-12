@@ -85,6 +85,7 @@ export function RoomScreen() {
       players={players}
       connected={connected}
       isHost={isHost}
+      error={error}
       onStart={session.startMatch}
       onLeave={() => {
         void session.leaveRoom();
