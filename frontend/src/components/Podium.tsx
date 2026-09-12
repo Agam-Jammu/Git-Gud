@@ -1,9 +1,12 @@
 import { motion } from "motion/react";
 
-import { liftOnHover, staggerContainer, staggerItem } from "../motion/presets";
+import { liftOnHover } from "../motion/presets";
 import type { PlayerDto } from "../types";
 import { CelebrationBurst } from "./CelebrationBurst";
 import { ScoreCountUp } from "./ScoreCountUp";
+
+const ROW_ENTRANCE_SECONDS = 0.38;
+const ROW_STAGGER_SECONDS = 0.09;
 
 export interface PodiumProps {
   standings: PlayerDto[];
@@ -44,20 +47,20 @@ export function Podium({ standings, playerName, isHost, onPlayAgain, onLeave }: 
         </h1>
       </header>
 
-      <motion.ol
-        aria-label="Final standings"
-        className="flex w-full max-w-2xl flex-col gap-2"
-        variants={staggerContainer}
-        initial="hidden"
-        animate="visible"
-      >
+      <ol aria-label="Final standings" className="flex w-full max-w-2xl flex-col gap-2">
         {standings.map((player, index) => {
           const champion = index === 0;
 
           return (
             <motion.li
               key={`${index}-${player.name}`}
-              variants={staggerItem}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: ROW_ENTRANCE_SECONDS,
+                delay: index * ROW_STAGGER_SECONDS,
+                ease: [0.16, 1, 0.3, 1],
+              }}
               className={`relative flex items-center justify-between rounded-md border px-4 py-3 ${
                 champion
                   ? "border-arena-correct shadow-[0_0_34px_-8px_rgb(47_191_113/0.85)]"
@@ -82,7 +85,7 @@ export function Podium({ standings, playerName, isHost, onPlayAgain, onLeave }: 
             </motion.li>
           );
         })}
-      </motion.ol>
+      </ol>
 
       <div className="flex flex-col items-center gap-3">
         {isHost ? (

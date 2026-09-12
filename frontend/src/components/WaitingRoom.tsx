@@ -1,8 +1,11 @@
 import { motion } from "motion/react";
 import { useState } from "react";
 
-import { fadeRise, liftOnHover, staggerContainer, staggerItem } from "../motion/presets";
+import { fadeRise, liftOnHover } from "../motion/presets";
 import type { PlayerDto } from "../types";
+
+const ROW_ENTRANCE_SECONDS = 0.38;
+const ROW_STAGGER_SECONDS = 0.07;
 
 export interface WaitingRoomProps {
   roomCode: string;
@@ -69,13 +72,15 @@ export function WaitingRoom({
 
       <motion.section
         className="cat-panel w-full max-w-sm p-6"
-        variants={staggerContainer}
+        variants={fadeRise}
         initial="hidden"
         animate="visible"
       >
         <motion.h2
           className="text-sm uppercase tracking-widest text-slate-400"
-          variants={staggerItem}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: ROW_ENTRANCE_SECONDS, ease: [0.16, 1, 0.3, 1] }}
         >
           Players ({players.length})
         </motion.h2>
@@ -84,7 +89,13 @@ export function WaitingRoom({
           {players.map((player, index) => (
             <motion.li
               key={`${index}-${player.name}`}
-              variants={staggerItem}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: ROW_ENTRANCE_SECONDS,
+                delay: index * ROW_STAGGER_SECONDS,
+                ease: [0.16, 1, 0.3, 1],
+              }}
               className="flex items-center justify-between rounded-md border border-arena-border px-3 py-2"
             >
               <span className="text-slate-100">{player.name}</span>

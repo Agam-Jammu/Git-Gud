@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 
-import { fadeRise, staggerContainer, staggerItem } from "../motion/presets";
+import { fadeRise } from "../motion/presets";
 import { categoryStyle, categoryTheme } from "../theme/categoryTheme";
 import type { QuestionDto } from "../types";
 
@@ -9,6 +9,9 @@ export interface QuestionCardProps {
   selectedOptionIndex: number | null;
   onSelect: (optionIndex: number) => void;
 }
+
+const OPTION_ENTRANCE_SECONDS = 0.38;
+const OPTION_STAGGER_SECONDS = 0.07;
 
 const OPTION_BASE = "w-full rounded-md border px-4 py-3 text-left transition-colors";
 
@@ -43,18 +46,21 @@ export function QuestionCard({ question, selectedOptionIndex, onSelect }: Questi
         </pre>
       ) : null}
 
-      <motion.ul
-        aria-label="Answer options"
-        className="mt-6 flex flex-col gap-2"
-        variants={staggerContainer}
-        initial="hidden"
-        animate="visible"
-      >
+      <ul aria-label="Answer options" className="mt-6 flex flex-col gap-2">
         {question.options.map((option, index) => {
           const selected = index === selectedOptionIndex;
 
           return (
-            <motion.li key={`${index}-${option}`} variants={staggerItem}>
+            <motion.li
+              key={`${index}-${option}`}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: OPTION_ENTRANCE_SECONDS,
+                delay: index * OPTION_STAGGER_SECONDS,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+            >
               <motion.button
                 type="button"
                 onClick={() => onSelect(index)}
@@ -69,7 +75,7 @@ export function QuestionCard({ question, selectedOptionIndex, onSelect }: Questi
             </motion.li>
           );
         })}
-      </motion.ul>
+      </ul>
 
       {locked ? (
         <p className="mt-4 text-sm text-slate-400">Answer locked in. Waiting for the others...</p>

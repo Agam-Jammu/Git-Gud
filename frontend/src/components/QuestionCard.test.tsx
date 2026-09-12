@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
@@ -56,5 +56,23 @@ describe("question card", () => {
       expect(screen.getByRole("button", { name })).toBeDisabled();
     }
     expect(screen.getByText("Answer locked in. Waiting for the others...")).toBeInTheDocument();
+  });
+
+  it("does not send the options back to their hidden state when an answer is chosen", async () => {
+    const { rerender } = render(
+      <QuestionCard question={QUESTION} selectedOptionIndex={null} onSelect={vi.fn()} />,
+    );
+
+    const wrapper = () => screen.getByRole("button", { name: "map" }).parentElement;
+
+    await waitFor(() => {
+      expect(wrapper()?.getAttribute("style") ?? "").toContain("opacity: 1");
+    });
+
+    const settled = wrapper()?.getAttribute("style") ?? "";
+
+    rerender(<QuestionCard question={QUESTION} selectedOptionIndex={2} onSelect={vi.fn()} />);
+
+    expect(wrapper()?.getAttribute("style") ?? "").toBe(settled);
   });
 });

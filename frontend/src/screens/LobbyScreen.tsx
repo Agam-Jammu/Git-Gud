@@ -2,11 +2,13 @@ import { motion } from "motion/react";
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { fadeRise, liftOnHover, staggerContainer, staggerItem } from "../motion/presets";
+import { fadeRise, liftOnHover } from "../motion/presets";
 import { useGameSession } from "../session/useGameSession";
 
 const MAX_NAME_LENGTH = 20;
 const ROOM_CODE_LENGTH = 6;
+const BLOCK_ENTRANCE_SECONDS = 0.38;
+const BLOCK_STAGGER_SECONDS = 0.07;
 
 const FIELD_CLASS =
   "rounded-md border border-arena-border bg-arena-background/70 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-[color:rgb(var(--cat-accent-rgb))] focus:shadow-[0_0_0_3px_rgb(var(--cat-accent-rgb)/0.25)]";
@@ -60,13 +62,15 @@ export function LobbyScreen() {
 
       <motion.div
         className="cat-panel flex w-full max-w-sm flex-col gap-6 p-6"
-        variants={staggerContainer}
+        variants={fadeRise}
         initial="hidden"
         animate="visible"
       >
         <motion.form
           className="flex flex-col gap-4"
-          variants={staggerItem}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: BLOCK_ENTRANCE_SECONDS, ease: [0.16, 1, 0.3, 1] }}
           onSubmit={handleCreate}
         >
           <label className="flex flex-col gap-2 text-sm text-slate-300" htmlFor="player-name">
@@ -93,14 +97,30 @@ export function LobbyScreen() {
 
         <motion.div
           className="flex items-center gap-3 text-xs uppercase tracking-widest text-slate-500"
-          variants={staggerItem}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: BLOCK_ENTRANCE_SECONDS,
+            delay: BLOCK_STAGGER_SECONDS,
+            ease: [0.16, 1, 0.3, 1],
+          }}
         >
           <span className="h-px flex-1 bg-arena-border" />
           or join
           <span className="h-px flex-1 bg-arena-border" />
         </motion.div>
 
-        <motion.form className="flex flex-col gap-4" variants={staggerItem} onSubmit={handleJoin}>
+        <motion.form
+          className="flex flex-col gap-4"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: BLOCK_ENTRANCE_SECONDS,
+            delay: BLOCK_STAGGER_SECONDS * 2,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+          onSubmit={handleJoin}
+        >
           <label className="flex flex-col gap-2 text-sm text-slate-300" htmlFor="room-code">
             Room code
             <input
