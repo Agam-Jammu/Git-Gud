@@ -139,6 +139,29 @@ describe("room screen", () => {
     expect(screen.getByText("Not quite")).toBeInTheDocument();
   });
 
+  it("shows the final standings when the match ends", () => {
+    renderRoom(
+      sessionWith({
+        phase: "gameOver",
+        playerName: "Sam",
+        players: [
+          { ...HOST, score: 3_000, answered: true },
+          { ...HOST, name: "Sam", score: 1_500, host: false, answered: true },
+        ],
+      }),
+    );
+
+    expect(screen.getByRole("heading", { name: "Alex wins" })).toBeInTheDocument();
+
+    const rows = screen.getAllByRole("listitem");
+
+    expect(rows).toHaveLength(2);
+    expect(rows[0]).toHaveTextContent("Alex");
+    expect(rows[0]).toHaveTextContent("3,000");
+    expect(rows[1]).toHaveTextContent("Sam");
+    expect(rows[1]).toHaveTextContent("You");
+  });
+
   it("shows a join failure through the prompt", () => {
     renderRoom(sessionWith({ roomCode: null, players: [], error: "No room with code ABC123" }));
 
