@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
+import { ArenaBackdropLayer } from "./components/ArenaBackdropLayer";
 import { AppMotionProvider } from "./motion/AppMotionProvider";
 import { LobbyScreen } from "./screens/LobbyScreen";
 import { PracticeScreen } from "./screens/PracticeScreen";
@@ -21,6 +22,7 @@ export default function App() {
   return (
     <AppMotionProvider>
       <GameSessionProvider>
+        <ArenaBackdropLayer />
         <BrowserRouter>
           <AppRoutes />
         </BrowserRouter>
