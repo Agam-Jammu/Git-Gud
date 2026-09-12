@@ -30,12 +30,19 @@ public class GameRoom {
 
     public boolean advanceQuestion() {
         currentQuestionIndex++;
-        players.values().forEach(Player::resetAnswerState);
+        for (Player player : players.values()) {
+            player.resetAnswerState();
+        }
         return currentQuestionIndex < questions.size();
     }
 
     public boolean allPlayersAnswered() {
-        return players.values().stream().allMatch(Player::hasAnswered);
+        for (Player player : players.values()) {
+            if (!player.hasAnswered()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void addPlayer(Player player) {
