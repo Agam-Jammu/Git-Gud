@@ -2,71 +2,19 @@ import { act, renderHook } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
 
-import type { GameSocket, GameSocketHandlers } from "../services/websocket";
-import type { GameEvent, PlayerDto } from "../types";
+import { createFakeSocketFactory, type FakeGameSocket } from "../test/fakeGameSocket";
+import type { PlayerDto } from "../types";
 import { GameSessionProvider, type GameApi } from "./GameSessionProvider";
 import { useGameSession } from "./useGameSession";
 
 const ALEX: PlayerDto = { name: "Alex", score: 0, streak: 0, answered: false, host: true };
 const SAM: PlayerDto = { name: "Sam", score: 0, streak: 0, answered: false, host: false };
 
-class FakeSocket implements GameSocket {
-  joined: string[] = [];
-  answers: Array<{ questionId: number; selectedOptionIndex: number }> = [];
-  startCount = 0;
-  leaveCount = 0;
-  deactivated = false;
-  open = false;
-
-  constructor(private readonly handlers: GameSocketHandlers) {}
-
-  connect() {
-    this.open = true;
-    this.handlers.onConnected?.();
-  }
-
-  async disconnect() {
-    this.deactivated = true;
-    this.open = false;
-  }
-
-  join(playerName: string) {
-    this.joined.push(playerName);
-  }
-
-  leave() {
-    this.leaveCount += 1;
-  }
-
-  start() {
-    this.startCount += 1;
-  }
-
-  answer(request: { questionId: number; selectedOptionIndex: number }) {
-    this.answers.push(request);
-  }
-
-  connected() {
-    return this.open;
-  }
-
-  emit(event: GameEvent) {
-    this.handlers.onEvent(event);
-  }
-}
-
 function setUp(api: GameApi) {
-  const sockets: FakeSocket[] = [];
+  const sockets: FakeGameSocket[] = [];
 
   const wrapper = ({ children }: { children: ReactNode }) => (
-    <GameSessionProvider
-      api={api}
-      socketFactory={(_roomCode, handlers) => {
-        const socket = new FakeSocket(handlers);
-        sockets.push(socket);
-        return socket;
-      }}
-    >
+    <GameSessionProvider api={api} socketFactory={createFakeSocketFactory(sockets)}>
       {children}
     </GameSessionProvider>
   );

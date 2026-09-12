@@ -3,12 +3,23 @@ import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 
 import { AppRoutes } from "./App";
+import { GameSessionProvider, type GameApi } from "./session/GameSessionProvider";
+import { createFakeSocketFactory, type FakeGameSocket } from "./test/fakeGameSocket";
+
+const fakeApi: GameApi = {
+  createRoom: async () => ({ code: "ABC123" }),
+  fetchRoomStatus: async () => ({ code: "ABC123", state: "LOBBY", players: [] }),
+};
 
 function renderAt(path: string) {
+  const sockets: FakeGameSocket[] = [];
+
   return render(
-    <MemoryRouter initialEntries={[path]}>
-      <AppRoutes />
-    </MemoryRouter>,
+    <GameSessionProvider api={fakeApi} socketFactory={createFakeSocketFactory(sockets)}>
+      <MemoryRouter initialEntries={[path]}>
+        <AppRoutes />
+      </MemoryRouter>
+    </GameSessionProvider>,
   );
 }
 
