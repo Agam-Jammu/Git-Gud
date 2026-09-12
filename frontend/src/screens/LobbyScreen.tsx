@@ -96,7 +96,7 @@ export function LobbyScreen() {
         </motion.form>
 
         <motion.div
-          className="flex items-center gap-3 text-xs uppercase tracking-widest text-slate-400"
+          className="flex items-center gap-3 text-xs uppercase tracking-widest text-slate-500"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{

@@ -33,7 +33,7 @@ export function RoundReveal({
       style={categoryStyle(categoryTheme(question?.category))}
     >
       <header className="text-center">
-        <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Round over</p>
+        <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Round over</p>
         <h1
           className={`mt-2 text-5xl font-bold ${
             answeredCorrectly ? "text-arena-correct" : "text-arena-wrong"

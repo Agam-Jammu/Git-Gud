@@ -19,7 +19,7 @@ export function Arena({ question, secondsRemaining, selectedOptionIndex, onSelec
     >
       <header className="flex w-full max-w-2xl items-end justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
+          <p className="text-xs uppercase tracking-[0.3em] text-slate-500">
             Question {question.questionNumber} of {question.totalQuestions}
           </p>
           <p className="cat-accent-text mt-1 text-sm font-semibold uppercase tracking-widest">

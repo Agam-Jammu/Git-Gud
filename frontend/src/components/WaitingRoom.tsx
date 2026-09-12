@@ -44,7 +44,7 @@ export function WaitingRoom({
         initial="hidden"
         animate="visible"
       >
-        <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Room code</p>
+        <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Room code</p>
         <h1 className="cat-gradient-text mt-2 text-5xl font-bold tracking-[0.3em]">{roomCode}</h1>
       </motion.header>
 
