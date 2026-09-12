@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { Countdown } from "../components/Countdown";
 import { JoinRoomPrompt } from "../components/JoinRoomPrompt";
@@ -11,6 +11,7 @@ import { Arena } from "./Arena";
 
 export function RoomScreen() {
   const { code } = useParams<{ code: string }>();
+  const navigate = useNavigate();
   const session = useGameSession();
   const {
     roomCode,
@@ -27,6 +28,11 @@ export function RoomScreen() {
   } = session;
 
   const secondsRemaining = useCountdown(question?.question.deadlineEpochMs ?? 0);
+
+  async function handleLeave() {
+    await session.leaveRoom();
+    navigate("/");
+  }
 
   if (!code || roomCode !== code) {
     return (
@@ -72,9 +78,7 @@ export function RoomScreen() {
         playerName={playerName}
         isHost={isHost}
         onPlayAgain={session.startMatch}
-        onLeave={() => {
-          void session.leaveRoom();
-        }}
+        onLeave={handleLeave}
       />
     );
   }
@@ -87,9 +91,7 @@ export function RoomScreen() {
       isHost={isHost}
       error={error}
       onStart={session.startMatch}
-      onLeave={() => {
-        void session.leaveRoom();
-      }}
+      onLeave={handleLeave}
     />
   );
 }

@@ -202,4 +202,25 @@ describe("room screen", () => {
 
     expect(session.leaveRoom).toHaveBeenCalledOnce();
   });
+
+  it("returns to the lobby after leaving the room", async () => {
+    const user = userEvent.setup();
+    const session = sessionWith();
+
+    render(
+      <GameSessionContext.Provider value={session}>
+        <MemoryRouter initialEntries={["/room/ABC123"]}>
+          <Routes>
+            <Route path="/room/:code" element={<RoomScreen />} />
+            <Route path="/" element={<p>lobby</p>} />
+          </Routes>
+        </MemoryRouter>
+      </GameSessionContext.Provider>,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Leave room" }));
+
+    expect(await screen.findByText("lobby")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Join this room" })).not.toBeInTheDocument();
+  });
 });
