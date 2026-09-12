@@ -58,6 +58,11 @@ public class GameWsController {
         gameEngineService.submitAnswer(code, requireSessionId(headers), request);
     }
 
+    @MessageMapping("/room/{code}/start")
+    public void start(@DestinationVariable String code, SimpMessageHeaderAccessor headers) {
+        gameEngineService.startMatch(code, requireSessionId(headers));
+    }
+
     private List<PlayerDto> roster(String code) {
         return PlayerMapper.toDtos(roomService.players(code));
     }

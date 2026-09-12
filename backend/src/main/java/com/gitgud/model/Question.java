@@ -20,7 +20,7 @@ public class Question {
     @Column(length = 2000)
     private String codeSnippet;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "question_options", joinColumns = @JoinColumn(name = "question_id"))
     @Column(name = "option_text")
     private List<String> options;
