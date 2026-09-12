@@ -1,4 +1,9 @@
+import { motion } from "motion/react";
+
+import { liftOnHover, staggerContainer, staggerItem } from "../motion/presets";
 import type { PlayerDto } from "../types";
+import { CelebrationBurst } from "./CelebrationBurst";
+import { ScoreCountUp } from "./ScoreCountUp";
 
 export interface PodiumProps {
   standings: PlayerDto[];
@@ -34,49 +39,61 @@ export function Podium({ standings, playerName, isHost, onPlayAgain, onLeave }: 
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 p-8">
       <header className="text-center">
         <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Final results</p>
-        <h1 className="mt-2 text-4xl font-semibold text-arena-accent">
+        <h1 className="cat-gradient-text mt-2 text-5xl font-bold">
           {winner ? `${winner.name} wins` : "No players"}
         </h1>
       </header>
 
-      <ol aria-label="Final standings" className="flex w-full max-w-2xl flex-col gap-2">
-        {standings.map((player, index) => (
-          <li
-            key={`${index}-${player.name}`}
-            className={`flex items-center justify-between rounded-md border px-4 py-3 ${
-              index === 0 ? "border-arena-correct" : "border-arena-border"
-            }`}
-          >
-            <span className="flex items-center gap-3">
-              <span className="w-10 text-xs uppercase tracking-widest text-slate-400">
-                {ordinal(index + 1)}
-              </span>
-              <span
-                className={index === 0 ? "font-semibold text-arena-correct" : "text-slate-100"}
-              >
-                {player.name}
-              </span>
-              {player.name === playerName ? (
-                <span className="text-xs uppercase tracking-widest text-slate-500">You</span>
-              ) : null}
-            </span>
+      <motion.ol
+        aria-label="Final standings"
+        className="flex w-full max-w-2xl flex-col gap-2"
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
+      >
+        {standings.map((player, index) => {
+          const champion = index === 0;
 
-            <span className="tabular-nums text-slate-300">
-              {player.score.toLocaleString("en-US")}
-            </span>
-          </li>
-        ))}
-      </ol>
+          return (
+            <motion.li
+              key={`${index}-${player.name}`}
+              variants={staggerItem}
+              className={`relative flex items-center justify-between rounded-md border px-4 py-3 ${
+                champion
+                  ? "border-arena-correct shadow-[0_0_34px_-8px_rgb(47_191_113/0.85)]"
+                  : "border-arena-border"
+              }`}
+            >
+              {champion ? <CelebrationBurst /> : null}
+
+              <span className="flex items-center gap-3">
+                <span className="w-10 text-xs uppercase tracking-widest text-slate-400">
+                  {ordinal(index + 1)}
+                </span>
+                <span className={champion ? "font-semibold text-arena-correct" : "text-slate-100"}>
+                  {player.name}
+                </span>
+                {player.name === playerName ? (
+                  <span className="text-xs uppercase tracking-widest text-slate-500">You</span>
+                ) : null}
+              </span>
+
+              <ScoreCountUp value={player.score} />
+            </motion.li>
+          );
+        })}
+      </motion.ol>
 
       <div className="flex flex-col items-center gap-3">
         {isHost ? (
-          <button
+          <motion.button
             type="button"
             onClick={onPlayAgain}
-            className="rounded-md bg-arena-accent px-6 py-2 font-semibold text-arena-background"
+            className="sheen cat-fill rounded-md px-6 py-2 font-semibold text-arena-background"
+            {...liftOnHover}
           >
             Play again
-          </button>
+          </motion.button>
         ) : (
           <p className="text-sm text-slate-400">Waiting for the host to start a rematch</p>
         )}

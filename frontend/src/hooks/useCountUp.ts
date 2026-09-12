@@ -1,17 +1,24 @@
-import { useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 const DEFAULT_DURATION_MS = 900;
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
 export interface UseCountUpOptions {
   durationMs?: number;
   reduceMotion?: boolean;
 }
 
+function prefersReducedMotion(): boolean {
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+    return false;
+  }
+
+  return window.matchMedia(REDUCED_MOTION_QUERY).matches;
+}
+
 export function useCountUp(target: number, options: UseCountUpOptions = {}): number {
   const { durationMs = DEFAULT_DURATION_MS, reduceMotion } = options;
-  const prefersReducedMotion = useReducedMotion();
-  const reduced = reduceMotion ?? prefersReducedMotion ?? false;
+  const reduced = reduceMotion ?? prefersReducedMotion();
 
   const [value, setValue] = useState(0);
   const currentRef = useRef(0);
