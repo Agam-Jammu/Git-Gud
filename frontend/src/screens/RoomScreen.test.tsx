@@ -20,6 +20,7 @@ function sessionWith(overrides: Partial<GameSession> = {}): GameSession {
     players: [HOST],
     countdownSeconds: null,
     question: null,
+    selectedOptionIndex: null,
     roundResult: null,
     latestEvent: null,
     error: null,

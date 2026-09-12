@@ -221,6 +221,7 @@ describe("game session", () => {
 
     expect(sockets[0]?.startCount).toBe(1);
     expect(sockets[0]?.answers).toEqual([{ questionId: 7, selectedOptionIndex: 2 }]);
+    expect(result.current.selectedOptionIndex).toBe(2);
   });
 
   it("leaves the room, resets state and disconnects", async () => {

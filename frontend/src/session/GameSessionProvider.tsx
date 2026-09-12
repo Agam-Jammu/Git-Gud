@@ -31,6 +31,7 @@ interface SessionState {
   phase: GamePhase;
   countdownSeconds: number | null;
   question: QuestionStartPayload | null;
+  selectedOptionIndex: number | null;
   roundResult: RoundResultDto | null;
   latestEvent: GameEvent | null;
   error: string | null;
@@ -44,6 +45,7 @@ const INITIAL_STATE: SessionState = {
   phase: "lobby",
   countdownSeconds: null,
   question: null,
+  selectedOptionIndex: null,
   roundResult: null,
   latestEvent: null,
   error: null,
@@ -65,7 +67,13 @@ function applyEvent(state: SessionState, event: GameEvent): SessionState {
     case "COUNTDOWN_TICK":
       return { ...next, phase: "countdown", countdownSeconds: event.payload.secondsRemaining };
     case "QUESTION_START":
-      return { ...next, phase: "question", question: event.payload, countdownSeconds: null };
+      return {
+        ...next,
+        phase: "question",
+        question: event.payload,
+        countdownSeconds: null,
+        selectedOptionIndex: null,
+      };
     case "ROUND_RESULT":
       return {
         ...next,
@@ -155,7 +163,12 @@ export function GameSessionProvider({
   }, []);
 
   const submitAnswer = useCallback((questionId: number, selectedOptionIndex: number) => {
-    socketRef.current?.answer({ questionId, selectedOptionIndex });
+    const socket = socketRef.current;
+    if (!socket?.connected()) {
+      return;
+    }
+    socket.answer({ questionId, selectedOptionIndex });
+    setState((current) => ({ ...current, selectedOptionIndex }));
   }, []);
 
   useEffect(

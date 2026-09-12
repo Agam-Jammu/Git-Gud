@@ -2,14 +2,27 @@ import { useParams } from "react-router-dom";
 
 import { Countdown } from "../components/Countdown";
 import { JoinRoomPrompt } from "../components/JoinRoomPrompt";
-import { QuestionCard } from "../components/QuestionCard";
 import { WaitingRoom } from "../components/WaitingRoom";
+import { useCountdown } from "../hooks/useCountdown";
 import { useGameSession } from "../session/useGameSession";
+import { Arena } from "./Arena";
 
 export function RoomScreen() {
   const { code } = useParams<{ code: string }>();
   const session = useGameSession();
-  const { roomCode, phase, countdownSeconds, question, players, connected, isHost, error } = session;
+  const {
+    roomCode,
+    phase,
+    countdownSeconds,
+    question,
+    selectedOptionIndex,
+    players,
+    connected,
+    isHost,
+    error,
+  } = session;
+
+  const secondsRemaining = useCountdown(question?.question.deadlineEpochMs ?? 0);
 
   if (!code || roomCode !== code) {
     return (
@@ -27,10 +40,11 @@ export function RoomScreen() {
 
   if (phase === "question" && question) {
     return (
-      <QuestionCard
-        question={question.question}
-        questionNumber={question.questionNumber}
-        totalQuestions={question.totalQuestions}
+      <Arena
+        question={question}
+        secondsRemaining={secondsRemaining}
+        selectedOptionIndex={selectedOptionIndex}
+        onSelect={(optionIndex) => session.submitAnswer(question.question.id, optionIndex)}
       />
     );
   }

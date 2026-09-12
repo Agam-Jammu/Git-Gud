@@ -13,6 +13,7 @@ export interface GameSession {
   players: PlayerDto[];
   countdownSeconds: number | null;
   question: QuestionStartPayload | null;
+  selectedOptionIndex: number | null;
   roundResult: RoundResultDto | null;
   latestEvent: GameEvent | null;
   error: string | null;
