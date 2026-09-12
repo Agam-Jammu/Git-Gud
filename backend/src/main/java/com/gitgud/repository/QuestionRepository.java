@@ -12,5 +12,14 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     @Query(value = "SELECT * FROM questions ORDER BY RAND() LIMIT :limit", nativeQuery = true)
     List<Question> findRandom(int limit);
+
+    @Query("select q.category as category, count(q) as count from Question q group by q.category order by q.category")
+    List<CategoryCount> countGroupedByCategory();
+
+    interface CategoryCount {
+        String getCategory();
+
+        long getCount();
+    }
 }
 
