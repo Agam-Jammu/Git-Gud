@@ -1,9 +1,91 @@
+@import "@fontsource-variable/space-grotesk/index.css";
+@import "@fontsource-variable/jetbrains-mono/index.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --cat-accent-rgb: 91 140 255;
+    --cat-accent-end-rgb: 129 140 248;
+  }
+
   body {
     @apply min-h-screen bg-arena-background text-slate-100 antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display tracking-tight;
+  }
+
+  code,
+  pre {
+    @apply font-mono;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--cat-accent-rgb));
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .cat-accent-text {
+    color: rgb(var(--cat-accent-rgb));
+  }
+
+  .cat-gradient-text {
+    background-image: linear-gradient(
+      100deg,
+      rgb(var(--cat-accent-rgb)),
+      rgb(var(--cat-accent-end-rgb)),
+      rgb(var(--cat-accent-rgb))
+    );
+    background-size: 200% 100%;
+    background-clip: text;
+    color: transparent;
+    @apply animate-gradient-pan;
+  }
+
+  .cat-panel {
+    @apply rounded-xl border border-arena-border bg-arena-surface/70 backdrop-blur-sm;
+    box-shadow:
+      0 0 0 1px rgb(var(--cat-accent-rgb) / 0.08),
+      0 20px 45px -28px rgb(var(--cat-accent-rgb) / 0.6);
+  }
+
+  .cat-glow {
+    box-shadow: 0 0 34px -8px rgb(var(--cat-accent-rgb) / 0.65);
+  }
+
+  .cat-edge {
+    border-color: rgb(var(--cat-accent-rgb) / 0.45);
+  }
+
+  .sheen {
+    @apply relative overflow-hidden;
+  }
+
+  .sheen::after {
+    @apply pointer-events-none absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-transparent via-white/25 to-transparent opacity-0;
+    content: "";
+  }
+
+  .sheen:hover::after {
+    @apply animate-sheen opacity-100;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }
