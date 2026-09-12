@@ -78,7 +78,6 @@ function applyEvent(state: SessionState, event: GameEvent): SessionState {
       return {
         ...next,
         phase: "reveal",
-        question: null,
         roundResult: event.payload,
         players: event.payload.scoreboard,
       };

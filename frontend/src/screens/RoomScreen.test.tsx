@@ -97,6 +97,48 @@ describe("room screen", () => {
     ).toBeInTheDocument();
   });
 
+  it("shows the reveal with the answer and the scoreboard", () => {
+    renderRoom(
+      sessionWith({
+        phase: "reveal",
+        selectedOptionIndex: 2,
+        question: {
+          question: {
+            id: 7,
+            category: "Java & Spring Boot",
+            text: "Which of these Stream operations is terminal?",
+            codeSnippet: null,
+            options: ["map", "filter", "collect", "peek"],
+            deadlineEpochMs: 1_000_000,
+          },
+          questionNumber: 1,
+          totalQuestions: 5,
+        },
+        roundResult: {
+          correctOptionIndex: 2,
+          explanation: "collect is terminal",
+          scoreboard: [{ ...HOST, score: 1_250, answered: true }],
+        },
+      }),
+    );
+
+    expect(screen.getByText("Correct")).toBeInTheDocument();
+    expect(screen.getByText("collect is terminal")).toBeInTheDocument();
+    expect(screen.getByText("Scoreboard")).toBeInTheDocument();
+  });
+
+  it("tells the player when their answer was wrong", () => {
+    renderRoom(
+      sessionWith({
+        phase: "reveal",
+        selectedOptionIndex: 0,
+        roundResult: { correctOptionIndex: 2, explanation: "because", scoreboard: [] },
+      }),
+    );
+
+    expect(screen.getByText("Not quite")).toBeInTheDocument();
+  });
+
   it("shows a join failure through the prompt", () => {
     renderRoom(sessionWith({ roomCode: null, players: [], error: "No room with code ABC123" }));
 

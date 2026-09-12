@@ -167,7 +167,7 @@ describe("game session", () => {
       });
     });
     expect(result.current.phase).toBe("reveal");
-    expect(result.current.question).toBeNull();
+    expect(result.current.question?.questionNumber).toBe(1);
     expect(result.current.roundResult?.correctOptionIndex).toBe(2);
 
     act(() => {

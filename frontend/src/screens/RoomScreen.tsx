@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 
 import { Countdown } from "../components/Countdown";
 import { JoinRoomPrompt } from "../components/JoinRoomPrompt";
+import { RoundReveal } from "../components/RoundReveal";
 import { WaitingRoom } from "../components/WaitingRoom";
 import { useCountdown } from "../hooks/useCountdown";
 import { useGameSession } from "../session/useGameSession";
@@ -16,6 +17,7 @@ export function RoomScreen() {
     countdownSeconds,
     question,
     selectedOptionIndex,
+    roundResult,
     players,
     connected,
     isHost,
@@ -49,12 +51,22 @@ export function RoomScreen() {
     );
   }
 
-  if (phase === "reveal" || phase === "gameOver") {
+  if (phase === "reveal" && roundResult) {
+    return (
+      <RoundReveal
+        question={question?.question ?? null}
+        correctOptionIndex={roundResult.correctOptionIndex}
+        explanation={roundResult.explanation}
+        scoreboard={roundResult.scoreboard}
+        selectedOptionIndex={selectedOptionIndex}
+      />
+    );
+  }
+
+  if (phase === "gameOver") {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-3 p-8">
-        <h1 className="text-3xl font-semibold text-arena-accent">
-          {phase === "gameOver" ? "Game over" : "Round over"}
-        </h1>
+        <h1 className="text-4xl font-semibold text-arena-accent">Game over</h1>
       </main>
     );
   }
