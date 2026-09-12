@@ -7,8 +7,8 @@ import type { GameEvent, PlayerDto } from "../types";
 import { GameSessionProvider, type GameApi } from "./GameSessionProvider";
 import { useGameSession } from "./useGameSession";
 
-const ALEX: PlayerDto = { name: "Alex", score: 0, streak: 0, answered: false };
-const SAM: PlayerDto = { name: "Sam", score: 0, streak: 0, answered: false };
+const ALEX: PlayerDto = { name: "Alex", score: 0, streak: 0, answered: false, host: true };
+const SAM: PlayerDto = { name: "Sam", score: 0, streak: 0, answered: false, host: false };
 
 class FakeSocket implements GameSocket {
   joined: string[] = [];

@@ -25,6 +25,7 @@ export interface PlayerDto {
   score: number;
   streak: number;
   answered: boolean;
+  host: boolean;
 }
 
 export interface QuestionDto {

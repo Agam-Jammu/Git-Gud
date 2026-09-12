@@ -6,6 +6,7 @@ import {
   type CountdownTickPayload,
   type GameEvent,
   type PlayerAnsweredPayload,
+  type PlayerDto,
   type QuestionStartPayload,
   type RoundResultDto,
 } from "./index";
@@ -74,7 +75,7 @@ describe("shared types", () => {
     const roundResult: RoundResultDto = {
       correctOptionIndex: 2,
       explanation: "because",
-      scoreboard: [{ name: "Alex", score: 1_250, streak: 1, answered: true }],
+      scoreboard: [{ name: "Alex", score: 1_250, streak: 1, answered: true, host: true }],
     };
 
     const answered: PlayerAnsweredPayload = {
@@ -85,5 +86,14 @@ describe("shared types", () => {
 
     expect(roundResult.scoreboard[0]?.answered).toBe(true);
     expect(answered.answeredCount).toBe(1);
+  });
+
+  it("flags exactly the room host on the roster", () => {
+    const host: PlayerDto = { name: "Alex", score: 0, streak: 0, answered: false, host: true };
+    const guest: PlayerDto = { ...host, name: "Sam", host: false };
+
+    expectTypeOf(host.host).toEqualTypeOf<boolean>();
+    expect(host.host).toBe(true);
+    expect(guest.host).toBe(false);
   });
 });
