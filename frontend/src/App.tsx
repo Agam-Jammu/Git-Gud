@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
+import { AppMotionProvider } from "./motion/AppMotionProvider";
 import { LobbyScreen } from "./screens/LobbyScreen";
 import { PracticeScreen } from "./screens/PracticeScreen";
 import { RoomScreen } from "./screens/RoomScreen";
@@ -18,10 +19,12 @@ export function AppRoutes() {
 
 export default function App() {
   return (
-    <GameSessionProvider>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
-    </GameSessionProvider>
+    <AppMotionProvider>
+      <GameSessionProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </GameSessionProvider>
+    </AppMotionProvider>
   );
 }
