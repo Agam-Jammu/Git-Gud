@@ -118,6 +118,64 @@ describe("game session", () => {
     expect(result.current.isHost).toBe(false);
   });
 
+  it("moves through the match phases as events arrive", async () => {
+    const { result, sockets } = setUp(apiWith());
+    await act(async () => {
+      await result.current.createRoom("Alex");
+    });
+
+    act(() => {
+      sockets[0]?.emit({ type: "COUNTDOWN_TICK", payload: { secondsRemaining: 3 } });
+    });
+    expect(result.current.phase).toBe("countdown");
+    expect(result.current.countdownSeconds).toBe(3);
+
+    act(() => {
+      sockets[0]?.emit({
+        type: "QUESTION_START",
+        payload: {
+          question: {
+            id: 7,
+            category: "Java & Spring Boot",
+            text: "Which of these Stream operations is terminal?",
+            codeSnippet: null,
+            options: ["map", "filter", "collect", "peek"],
+            deadlineEpochMs: 1_000_000,
+          },
+          questionNumber: 1,
+          totalQuestions: 5,
+        },
+      });
+    });
+    expect(result.current.phase).toBe("question");
+    expect(result.current.countdownSeconds).toBeNull();
+    expect(result.current.question?.questionNumber).toBe(1);
+
+    act(() => {
+      sockets[0]?.emit({
+        type: "PLAYER_ANSWERED",
+        payload: { playerName: "Alex", answeredCount: 1, playerCount: 2 },
+      });
+    });
+    expect(result.current.phase).toBe("question");
+    expect(result.current.question?.questionNumber).toBe(1);
+
+    act(() => {
+      sockets[0]?.emit({
+        type: "ROUND_RESULT",
+        payload: { correctOptionIndex: 2, explanation: "because", scoreboard: [ALEX] },
+      });
+    });
+    expect(result.current.phase).toBe("reveal");
+    expect(result.current.question).toBeNull();
+    expect(result.current.roundResult?.correctOptionIndex).toBe(2);
+
+    act(() => {
+      sockets[0]?.emit({ type: "GAME_OVER", payload: { standings: [ALEX, SAM] } });
+    });
+    expect(result.current.phase).toBe("gameOver");
+  });
+
   it("adopts the scoreboard from a round result", async () => {
     const { result, sockets } = setUp(apiWith());
     await act(async () => {

@@ -2,8 +2,15 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } fro
 
 import { createRoom as createRoomRequest, fetchRoomStatus } from "../services/api";
 import { createGameSocket, type GameSocket } from "../services/websocket";
-import type { GameEvent, PlayerDto, RoomCreatedResponse, RoomStatusDto } from "../types";
-import { GameSessionContext, type GameSession } from "./gameSessionContext";
+import type {
+  GameEvent,
+  PlayerDto,
+  QuestionStartPayload,
+  RoomCreatedResponse,
+  RoomStatusDto,
+  RoundResultDto,
+} from "../types";
+import { GameSessionContext, type GamePhase, type GameSession } from "./gameSessionContext";
 
 export interface GameApi {
   createRoom: () => Promise<RoomCreatedResponse>;
@@ -21,6 +28,10 @@ interface SessionState {
   playerName: string | null;
   connected: boolean;
   players: PlayerDto[];
+  phase: GamePhase;
+  countdownSeconds: number | null;
+  question: QuestionStartPayload | null;
+  roundResult: RoundResultDto | null;
   latestEvent: GameEvent | null;
   error: string | null;
 }
@@ -30,6 +41,10 @@ const INITIAL_STATE: SessionState = {
   playerName: null,
   connected: false,
   players: [],
+  phase: "lobby",
+  countdownSeconds: null,
+  question: null,
+  roundResult: null,
   latestEvent: null,
   error: null,
 };
@@ -47,10 +62,26 @@ function applyEvent(state: SessionState, event: GameEvent): SessionState {
     case "PLAYER_JOINED":
     case "PLAYER_LEFT":
       return { ...next, players: event.payload.players };
+    case "COUNTDOWN_TICK":
+      return { ...next, phase: "countdown", countdownSeconds: event.payload.secondsRemaining };
+    case "QUESTION_START":
+      return { ...next, phase: "question", question: event.payload, countdownSeconds: null };
     case "ROUND_RESULT":
-      return { ...next, players: event.payload.scoreboard };
+      return {
+        ...next,
+        phase: "reveal",
+        question: null,
+        roundResult: event.payload,
+        players: event.payload.scoreboard,
+      };
     case "GAME_OVER":
-      return { ...next, players: event.payload.standings };
+      return {
+        ...next,
+        phase: "gameOver",
+        question: null,
+        roundResult: null,
+        players: event.payload.standings,
+      };
     default:
       return next;
   }

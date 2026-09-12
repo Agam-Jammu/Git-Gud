@@ -16,7 +16,11 @@ function sessionWith(overrides: Partial<GameSession> = {}): GameSession {
     playerName: "Alex",
     connected: true,
     isHost: true,
+    phase: "lobby",
     players: [HOST],
+    countdownSeconds: null,
+    question: null,
+    roundResult: null,
     latestEvent: null,
     error: null,
     createRoom: vi.fn().mockResolvedValue(undefined),
@@ -58,6 +62,38 @@ describe("room screen", () => {
     await user.click(screen.getByRole("button", { name: "Join this room" }));
 
     expect(session.joinRoom).toHaveBeenCalledWith("ABC123", "Casey");
+  });
+
+  it("shows the countdown while the match is about to start", () => {
+    renderRoom(sessionWith({ phase: "countdown", countdownSeconds: 3 }));
+
+    expect(screen.getByText("Get ready")).toBeInTheDocument();
+    expect(screen.getByText("3")).toBeInTheDocument();
+  });
+
+  it("shows the current question during a round", () => {
+    renderRoom(
+      sessionWith({
+        phase: "question",
+        question: {
+          question: {
+            id: 7,
+            category: "Java & Spring Boot",
+            text: "Which of these Stream operations is terminal?",
+            codeSnippet: null,
+            options: ["map", "filter", "collect", "peek"],
+            deadlineEpochMs: 1_000_000,
+          },
+          questionNumber: 1,
+          totalQuestions: 5,
+        },
+      }),
+    );
+
+    expect(screen.getByText("Question 1 of 5")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Which of these Stream operations is terminal?" }),
+    ).toBeInTheDocument();
   });
 
   it("shows a join failure through the prompt", () => {
