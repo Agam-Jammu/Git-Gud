@@ -31,3 +31,6 @@ yarn-error.log*
 .terraform/
 .terraform.lock.hcl
 
+# Local Docs
+PROJECT_PLAN.md
+

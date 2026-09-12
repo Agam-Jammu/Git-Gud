@@ -1,26 +1,18 @@
-# Git Gud ⚡
-> **Real-Time Multiplayer Developer Trivia & Buzzer Arena**  
-> *Built with Java 17, Spring Boot 3, WebSockets (STOMP), React 18 (TypeScript), Tailwind CSS, JUnit 5, Docker, and GCP Terraform.*
+# git-gud
 
----
+Real-time multiplayer trivia for developers. Think Kahoot, but with actual coding questions and a live buzzer.
 
-## What is Git Gud?
+You can practice solo or spin up a room with a 6-digit code to challenge a friend or interviewer. You get 10 seconds per question, extra points for speed and streak multipliers if you stay on a roll.
 
-**Git Gud** is a fast-paced, real-time multiplayer developer trivia and buzzer arena designed for software engineers. 
+## Questions Cover
 
-Players can jump into **Solo Practice Mode** or create a **1v1 / Multiplayer Room** using a 6-digit room code to challenge friends or interviewers. Rapid-fire rounds test technical mastery across **Java & Spring, SQL & Databases, Git & Linux, and Web & Cloud Architecture** with live countdowns, buzzer hotkeys, speed bonuses, and server-authoritative score synchronization.
-
----
-
-## Full Architecture & Implementation Plan
-
-The complete architectural blueprint, data model, WebSocket specifications, and resume guide are detailed in:
-📄 **[PROJECT_PLAN.md](./PROJECT_PLAN.md)**
-
----
+- Java & Spring Boot
+- SQL & database internals
+- Git & Linux
+- Web & systems architecture
 
 ## Tech Stack
 
-- **Backend**: Java 17, Spring Boot 3, Spring WebSockets (STOMP / SockJS), Spring Data JPA, H2 / PostgreSQL, JUnit 5, Mockito.
-- **Frontend**: React 18, Vite, TypeScript, Tailwind CSS, Lucide Icons, Canvas Confetti.
-- **DevOps & Cloud**: Multi-stage Dockerfiles, Docker Compose, Terraform (GCP Cloud Run), GitHub Actions CI.
+- **Backend**: Java 17, Spring Boot 3, WebSockets (STOMP), Spring Data JPA and H2
+- **Frontend**: React 18, TypeScript and Tailwind CSS
+- **Infra & Tooling**: Docker, Docker Compose, Terraform (GCP) and GitHub Actions
