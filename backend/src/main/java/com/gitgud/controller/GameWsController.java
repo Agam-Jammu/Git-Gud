@@ -7,7 +7,6 @@ import com.gitgud.dto.events.GameEventDto;
 import com.gitgud.dto.events.GameEventType;
 import com.gitgud.dto.events.PlayerJoinedPayload;
 import com.gitgud.dto.events.PlayerLeftPayload;
-import com.gitgud.model.GameRoom;
 import com.gitgud.model.Player;
 import com.gitgud.service.RoomService;
 import jakarta.validation.Valid;
@@ -49,11 +48,7 @@ public class GameWsController {
     }
 
     private List<PlayerDto> roster(String code) {
-        Optional<GameRoom> room = roomService.find(code);
-        if (room.isEmpty()) {
-            return List.of();
-        }
-        return PlayerMapper.toDtos(room.get().getPlayers().values());
+        return PlayerMapper.toDtos(roomService.players(code));
     }
 
     private String playerNameOrNull(Optional<Player> player) {

@@ -7,6 +7,8 @@ import com.gitgud.model.Player;
 import com.gitgud.util.RoomCodeGenerator;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -52,18 +54,25 @@ public class RoomService {
 
     public Optional<Player> leave(String code, String sessionId) {
         Optional<GameRoom> found = find(code);
-        if (found.isEmpty()) {
-            return Optional.empty();
-        }
+        return found.isEmpty() ? Optional.empty() : removeFrom(found.get(), sessionId);
+    }
 
-        GameRoom room = found.get();
-        Player removed = room.removePlayer(sessionId);
-        if (room.getPlayers().isEmpty()) {
-            rooms.remove(room.getCode());
-        } else if (removed != null && room.isHost(sessionId)) {
-            room.promoteNewHost();
+    public List<RoomDeparture> leaveAll(String sessionId) {
+        List<RoomDeparture> departures = new ArrayList<>();
+        for (GameRoom room : List.copyOf(rooms.values())) {
+            Player player = room.getPlayers().get(sessionId);
+            if (player != null) {
+                String playerName = player.getName();
+                removeFrom(room, sessionId);
+                departures.add(new RoomDeparture(room.getCode(), playerName));
+            }
         }
-        return Optional.ofNullable(removed);
+        return departures;
+    }
+
+    public List<Player> players(String code) {
+        Optional<GameRoom> room = find(code);
+        return room.isEmpty() ? List.of() : List.copyOf(room.get().getPlayers().values());
     }
 
     public GameRoom start(String code, String sessionId) {
@@ -76,6 +85,16 @@ public class RoomService {
         }
         room.setState(GameState.COUNTDOWN);
         return room;
+    }
+
+    private Optional<Player> removeFrom(GameRoom room, String sessionId) {
+        Player removed = room.removePlayer(sessionId);
+        if (room.getPlayers().isEmpty()) {
+            rooms.remove(room.getCode());
+        } else if (removed != null && room.isHost(sessionId)) {
+            room.promoteNewHost();
+        }
+        return Optional.ofNullable(removed);
     }
 
     private GameRoom require(String code) {
