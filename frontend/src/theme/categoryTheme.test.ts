@@ -58,13 +58,26 @@ describe("categoryTheme", () => {
     const style = categoryStyle(categoryTheme("SQL & Databases"));
 
     expect(style["--cat-accent-rgb"]).toBe("251 191 36");
-    expect(style["--cat-accent-end-rgb"]).toBe("251 146 60");
+    expect(style["--cat-accent-end-rgb"]).toBe("248 113 113");
   });
 
   it("exposes the default theme as css custom properties", () => {
     const style = categoryStyle(categoryTheme("unknown"));
 
     expect(style["--cat-accent-rgb"]).toBe("91 140 255");
-    expect(style["--cat-accent-end-rgb"]).toBe("129 140 248");
+    expect(style["--cat-accent-end-rgb"]).toBe("232 121 249");
+  });
+
+  it("keeps the two gradient stops far enough apart to stay visible", () => {
+    for (const category of [...SERVER_CATEGORIES, "unknown"]) {
+      const theme = categoryTheme(category);
+      const [accentRed, accentGreen, accentBlue] = theme.accentRgb.split(" ").map(Number);
+      const [endRed, endGreen, endBlue] = theme.accentEndRgb.split(" ").map(Number);
+      const distance = Math.sqrt(
+        (accentRed - endRed) ** 2 + (accentGreen - endGreen) ** 2 + (accentBlue - endBlue) ** 2,
+      );
+
+      expect(distance).toBeGreaterThan(90);
+    }
   });
 });

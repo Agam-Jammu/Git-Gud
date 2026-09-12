@@ -41,7 +41,7 @@ describe("ArenaBackdrop", () => {
     const style = backdrop().getAttribute("style") ?? "";
 
     expect(style).toContain("251 191 36");
-    expect(style).toContain("251 146 60");
+    expect(style).toContain("248 113 113");
   });
 
   it("falls back to the default accent for an unknown category", () => {
@@ -52,11 +52,23 @@ describe("ArenaBackdrop", () => {
     expect(style).toContain("91 140 255");
   });
 
-  it("drifts two layers on the shared keyframe", () => {
+  it("drifts three layers on the shared keyframe", () => {
     render(<ArenaBackdrop />);
 
     const layers = backdrop().querySelectorAll(".animate-drift");
 
-    expect(layers).toHaveLength(2);
+    expect(layers).toHaveLength(3);
+  });
+
+  it("spreads both accent stops across the mesh", () => {
+    render(<ArenaBackdrop />);
+
+    const layers = backdrop().querySelectorAll(".animate-drift");
+    const gradients = Array.from(layers).map(
+      (layer) => layer.getAttribute("style") ?? "",
+    );
+
+    expect(gradients.filter((gradient) => gradient.includes("accent-rgb"))).toHaveLength(1);
+    expect(gradients.filter((gradient) => gradient.includes("accent-end-rgb"))).toHaveLength(2);
   });
 });

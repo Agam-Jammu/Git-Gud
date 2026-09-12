@@ -1,13 +1,15 @@
+import { motion } from "motion/react";
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { fadeRise, liftOnHover, staggerContainer, staggerItem } from "../motion/presets";
 import { useGameSession } from "../session/useGameSession";
 
 const MAX_NAME_LENGTH = 20;
 const ROOM_CODE_LENGTH = 6;
 
 const FIELD_CLASS =
-  "rounded-md border border-arena-border bg-arena-background px-3 py-2 text-slate-100 outline-none focus:border-arena-accent";
+  "rounded-md border border-arena-border bg-arena-background/70 px-3 py-2 text-slate-100 outline-none transition-shadow focus:border-[color:rgb(var(--cat-accent-rgb))] focus:shadow-[0_0_0_3px_rgb(var(--cat-accent-rgb)/0.25)]";
 
 export function LobbyScreen() {
   const { createRoom, joinRoom, error, roomCode } = useGameSession();
@@ -46,13 +48,27 @@ export function LobbyScreen() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-8 p-8">
-      <header className="text-center">
-        <h1 className="text-5xl font-bold tracking-tight text-arena-accent">Git Gud</h1>
-        <p className="mt-2 text-slate-400">Real-time multiplayer developer trivia.</p>
-      </header>
+      <motion.header
+        className="text-center"
+        variants={fadeRise}
+        initial="hidden"
+        animate="visible"
+      >
+        <h1 className="cat-gradient-text text-6xl font-bold tracking-tight">Git Gud</h1>
+        <p className="mt-3 text-slate-400">Real-time multiplayer developer trivia.</p>
+      </motion.header>
 
-      <div className="flex w-full max-w-sm flex-col gap-6 rounded-xl border border-arena-border bg-arena-surface p-6">
-        <form className="flex flex-col gap-4" onSubmit={handleCreate}>
+      <motion.div
+        className="cat-panel flex w-full max-w-sm flex-col gap-6 p-6"
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.form
+          className="flex flex-col gap-4"
+          variants={staggerItem}
+          onSubmit={handleCreate}
+        >
           <label className="flex flex-col gap-2 text-sm text-slate-300" htmlFor="player-name">
             Your name
             <input
@@ -65,22 +81,26 @@ export function LobbyScreen() {
             />
           </label>
 
-          <button
+          <motion.button
             type="submit"
             disabled={!nameReady}
-            className="rounded-md bg-arena-accent px-4 py-2 font-semibold text-arena-background disabled:opacity-40"
+            className="sheen cat-fill rounded-md px-4 py-2 font-semibold text-arena-background disabled:opacity-60"
+            {...liftOnHover}
           >
             Create a room
-          </button>
-        </form>
+          </motion.button>
+        </motion.form>
 
-        <div className="flex items-center gap-3 text-xs uppercase tracking-widest text-slate-500">
+        <motion.div
+          className="flex items-center gap-3 text-xs uppercase tracking-widest text-slate-500"
+          variants={staggerItem}
+        >
           <span className="h-px flex-1 bg-arena-border" />
           or join
           <span className="h-px flex-1 bg-arena-border" />
-        </div>
+        </motion.div>
 
-        <form className="flex flex-col gap-4" onSubmit={handleJoin}>
+        <motion.form className="flex flex-col gap-4" variants={staggerItem} onSubmit={handleJoin}>
           <label className="flex flex-col gap-2 text-sm text-slate-300" htmlFor="room-code">
             Room code
             <input
@@ -93,29 +113,33 @@ export function LobbyScreen() {
             />
           </label>
 
-          <button
+          <motion.button
             type="submit"
             disabled={!nameReady || !codeReady}
-            className="rounded-md border border-arena-accent px-4 py-2 font-semibold text-arena-accent disabled:opacity-40"
+            className="sheen cat-fill rounded-md px-4 py-2 font-semibold text-arena-background disabled:opacity-60"
+            {...liftOnHover}
           >
             Join a room
-          </button>
-        </form>
+          </motion.button>
+        </motion.form>
 
         {error ? (
           <p role="alert" className="text-sm text-arena-wrong">
             {error}
           </p>
         ) : null}
-      </div>
+      </motion.div>
 
-      <button
+      <motion.button
         type="button"
         onClick={() => navigate("/practice")}
         className="text-sm text-slate-400 underline"
+        variants={fadeRise}
+        initial="hidden"
+        animate="visible"
       >
         Practise on your own
-      </button>
+      </motion.button>
     </main>
   );
 }

@@ -48,7 +48,7 @@ export default {
       animation: {
         drift: "drift 26s ease-in-out infinite alternate",
         "gradient-pan": "gradient-pan 8s ease infinite",
-        sheen: "sheen 1.1s ease-in-out",
+        sheen: "sheen 1.6s ease-in-out infinite",
         "pulse-ring": "pulse-ring 1s ease-out infinite",
       },
     },

@@ -13,14 +13,21 @@ export function ArenaBackdrop({ category }: ArenaBackdropProps) {
       className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
     >
       <div
-        className="absolute -left-1/4 -top-1/4 h-[70vh] w-[70vw] animate-drift rounded-full opacity-40 blur-3xl [animation-duration:26s]"
+        className="absolute -left-1/4 -top-1/4 h-[70vh] w-[70vw] animate-drift rounded-full opacity-45 blur-3xl [animation-duration:26s]"
         style={{
           background:
-            "radial-gradient(circle at center, rgb(var(--cat-accent-rgb) / 0.6), transparent 70%)",
+            "radial-gradient(circle at center, rgb(var(--cat-accent-rgb) / 0.65), transparent 70%)",
         }}
       />
       <div
-        className="absolute -bottom-1/4 -right-1/4 h-[65vh] w-[65vw] animate-drift rounded-full opacity-35 blur-3xl [animation-delay:-9s] [animation-direction:alternate-reverse] [animation-duration:34s]"
+        className="absolute -bottom-1/4 -right-1/4 h-[65vh] w-[65vw] animate-drift rounded-full opacity-40 blur-3xl [animation-delay:-9s] [animation-direction:alternate-reverse] [animation-duration:34s]"
+        style={{
+          background:
+            "radial-gradient(circle at center, rgb(var(--cat-accent-end-rgb) / 0.6), transparent 70%)",
+        }}
+      />
+      <div
+        className="absolute -right-1/4 -top-1/4 h-[50vh] w-[50vw] animate-drift rounded-full opacity-35 blur-3xl [animation-delay:-17s] [animation-duration:30s]"
         style={{
           background:
             "radial-gradient(circle at center, rgb(var(--cat-accent-end-rgb) / 0.55), transparent 70%)",
