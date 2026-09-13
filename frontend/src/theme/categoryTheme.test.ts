@@ -80,4 +80,46 @@ describe("categoryTheme", () => {
       expect(distance).toBeGreaterThan(90);
     }
   });
+
+  it("gives every category its own base colour", () => {
+    const bases = [...SERVER_CATEGORIES, "unknown"].map(
+      (category) => categoryTheme(category).baseRgb,
+    );
+
+    expect(new Set(bases).size).toBe(bases.length);
+
+    for (const base of bases) {
+      expect(base).toMatch(RGB_TRIPLET);
+    }
+  });
+
+  it("keeps every base dark enough for muted copy to stay readable", () => {
+    const luminance = (triplet: string) => {
+      const channels = triplet
+        .split(" ")
+        .map(Number)
+        .map((channel) => {
+          const value = channel / 255;
+
+          return value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+        });
+
+      return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+    };
+
+    const contrast = (one: number, other: number) => {
+      const lighter = Math.max(one, other);
+      const darker = Math.min(one, other);
+
+      return (lighter + 0.05) / (darker + 0.05);
+    };
+
+    const slate400 = luminance("148 163 184");
+
+    for (const category of [...SERVER_CATEGORIES, "unknown"]) {
+      const ratio = contrast(luminance(categoryTheme(category).baseRgb), slate400);
+
+      expect(ratio).toBeGreaterThanOrEqual(4.5);
+    }
+  });
 });

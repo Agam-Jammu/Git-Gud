@@ -10,7 +10,7 @@ export function ArenaBackdrop({ category }: ArenaBackdropProps) {
       aria-hidden="true"
       data-testid="arena-backdrop"
       style={categoryStyle(categoryTheme(category))}
-      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
+      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[rgb(var(--cat-base-rgb))]"
     >
       <div
         className="absolute -left-1/4 -top-1/4 h-[70vh] w-[70vw] animate-drift rounded-full opacity-45 blur-3xl [animation-duration:26s]"

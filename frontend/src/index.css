@@ -9,6 +9,7 @@
   :root {
     --cat-accent-rgb: 91 140 255;
     --cat-accent-end-rgb: 232 121 249;
+    --cat-base-rgb: 25 38 72;
   }
 
   body {

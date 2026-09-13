@@ -60,6 +60,13 @@ describe("ArenaBackdrop", () => {
     expect(layers).toHaveLength(3);
   });
 
+  it("paints the category base colour behind everything", () => {
+    render(<ArenaBackdrop category="Git & Linux" />);
+
+    expect(backdrop()).toHaveClass("bg-[rgb(var(--cat-base-rgb))]");
+    expect(backdrop().getAttribute("style") ?? "").toContain("--cat-base-rgb");
+  });
+
   it("spreads both accent stops across the mesh", () => {
     render(<ArenaBackdrop />);
 
