@@ -14,7 +14,6 @@ export interface RoundRevealProps {
 
 const ROW_ENTRANCE_SECONDS = 0.38;
 const ROW_STAGGER_SECONDS = 0.07;
-const CORRECT_ANSWER_EXTRA_DELAY_SECONDS = 0.4;
 
 export function RoundReveal({
   question,
@@ -55,16 +54,17 @@ export function RoundReveal({
               const outcome = optionOutcome(index, correctOptionIndex, selectedOptionIndex);
               const emphasis =
                 outcome === "correct" ? " shadow-[0_0_30px_-8px_rgb(47_191_113/0.9)]" : "";
-              const delay =
-                index * ROW_STAGGER_SECONDS +
-                (outcome === "correct" ? CORRECT_ANSWER_EXTRA_DELAY_SECONDS : 0);
 
               return (
                 <motion.li
                   key={`${index}-${option}`}
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: ROW_ENTRANCE_SECONDS, delay, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{
+                    duration: ROW_ENTRANCE_SECONDS,
+                    delay: index * ROW_STAGGER_SECONDS,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
                   className={`rounded-md border px-4 py-3${emphasis} ${optionOutcomeClass(outcome)}`}
                 >
                   {option}
