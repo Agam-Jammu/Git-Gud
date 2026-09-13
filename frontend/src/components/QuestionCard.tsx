@@ -21,10 +21,10 @@ function optionClass(selected: boolean, locked: boolean): string {
   }
 
   if (locked) {
-    return `${OPTION_BASE} border-arena-border text-slate-400 opacity-60`;
+    return `${OPTION_BASE} border-[color:rgb(var(--cat-accent-rgb)/0.14)] text-slate-400 opacity-60`;
   }
 
-  return `${OPTION_BASE} border-arena-border text-slate-200 hover:border-[color:rgb(var(--cat-accent-rgb))]`;
+  return `${OPTION_BASE} border-[color:rgb(var(--cat-accent-rgb)/0.22)] text-slate-200 hover:border-[color:rgb(var(--cat-accent-rgb))]`;
 }
 
 export function QuestionCard({ question, selectedOptionIndex, onSelect }: QuestionCardProps) {

@@ -91,7 +91,7 @@ export function RoundReveal({
                 delay: index * ROW_STAGGER_SECONDS,
                 ease: [0.16, 1, 0.3, 1],
               }}
-              className="flex items-center justify-between rounded-md border border-arena-border px-3 py-2"
+              className="flex items-center justify-between rounded-md border border-[color:rgb(var(--cat-accent-rgb)/0.22)] px-3 py-2"
             >
               <span className="text-slate-100">{player.name}</span>
               <span className="flex items-center gap-2 tabular-nums">

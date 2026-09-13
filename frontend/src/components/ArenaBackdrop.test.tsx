@@ -41,7 +41,7 @@ describe("ArenaBackdrop", () => {
     const style = backdrop().getAttribute("style") ?? "";
 
     expect(style).toContain("251 191 36");
-    expect(style).toContain("248 113 113");
+    expect(style).toContain("244 114 182");
   });
 
   it("falls back to the default accent for an unknown category", () => {

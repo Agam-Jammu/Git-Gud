@@ -64,7 +64,7 @@ export function Podium({ standings, playerName, isHost, onPlayAgain, onLeave }: 
               className={`relative flex items-center justify-between rounded-md border px-4 py-3 ${
                 champion
                   ? "border-arena-correct shadow-[0_0_34px_-8px_rgb(47_191_113/0.85)]"
-                  : "border-arena-border"
+                  : "border-[color:rgb(var(--cat-accent-rgb)/0.22)]"
               }`}
             >
               {champion ? <CelebrationBurst /> : null}

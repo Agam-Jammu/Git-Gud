@@ -10,6 +10,7 @@
     --cat-accent-rgb: 91 140 255;
     --cat-accent-end-rgb: 232 121 249;
     --cat-base-rgb: 25 38 72;
+    --cat-surface-rgb: 31 43 80;
   }
 
   body {
@@ -64,7 +65,9 @@
   }
 
   .cat-panel {
-    @apply rounded-xl border border-arena-border bg-arena-surface/70 backdrop-blur-sm;
+    @apply rounded-xl border backdrop-blur-sm;
+    background-color: rgb(var(--cat-surface-rgb) / 0.82);
+    border-color: rgb(var(--cat-accent-rgb) / 0.22);
     box-shadow:
       0 0 0 1px rgb(var(--cat-accent-rgb) / 0.08),
       0 20px 45px -28px rgb(var(--cat-accent-rgb) / 0.6);

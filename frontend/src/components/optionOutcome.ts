@@ -23,6 +23,6 @@ export function optionOutcomeClass(outcome: OptionOutcome): string {
     case "chosen":
       return "border-arena-wrong text-arena-wrong";
     default:
-      return "border-arena-border text-slate-400";
+      return "border-[color:rgb(var(--cat-accent-rgb)/0.22)] text-slate-400";
   }
 }

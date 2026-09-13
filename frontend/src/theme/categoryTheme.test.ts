@@ -58,7 +58,7 @@ describe("categoryTheme", () => {
     const style = categoryStyle(categoryTheme("SQL & Databases"));
 
     expect(style["--cat-accent-rgb"]).toBe("251 191 36");
-    expect(style["--cat-accent-end-rgb"]).toBe("248 113 113");
+    expect(style["--cat-accent-end-rgb"]).toBe("244 114 182");
   });
 
   it("exposes the default theme as css custom properties", () => {
@@ -93,7 +93,7 @@ describe("categoryTheme", () => {
     }
   });
 
-  it("keeps every base dark enough for muted copy to stay readable", () => {
+  it("keeps every surface dark enough for muted copy to stay readable", () => {
     const luminance = (triplet: string) => {
       const channels = triplet
         .split(" ")
@@ -117,9 +117,32 @@ describe("categoryTheme", () => {
     const slate400 = luminance("148 163 184");
 
     for (const category of [...SERVER_CATEGORIES, "unknown"]) {
-      const ratio = contrast(luminance(categoryTheme(category).baseRgb), slate400);
+      const theme = categoryTheme(category);
 
-      expect(ratio).toBeGreaterThanOrEqual(4.5);
+      for (const triplet of [theme.baseRgb, theme.surfaceRgb]) {
+        expect(contrast(luminance(triplet), slate400)).toBeGreaterThanOrEqual(4.5);
+      }
+    }
+  });
+
+  it("keeps category accents clear of the answer feedback colours", () => {
+    const feedback = ["47 191 113", "239 77 91"];
+
+    for (const category of [...SERVER_CATEGORIES, "unknown"]) {
+      const [accentRed, accentGreen, accentBlue] = categoryTheme(category)
+        .accentRgb.split(" ")
+        .map(Number);
+
+      for (const triplet of feedback) {
+        const [feedbackRed, feedbackGreen, feedbackBlue] = triplet.split(" ").map(Number);
+        const distance = Math.sqrt(
+          (accentRed - feedbackRed) ** 2 +
+            (accentGreen - feedbackGreen) ** 2 +
+            (accentBlue - feedbackBlue) ** 2,
+        );
+
+        expect(distance).toBeGreaterThan(30);
+      }
     }
   });
 });

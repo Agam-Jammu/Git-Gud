@@ -65,7 +65,7 @@ describe("arena", () => {
     const style = screen.getByRole("main").getAttribute("style") ?? "";
 
     expect(style).toContain("--cat-accent-rgb");
-    expect(style).toContain("167 139 250");
+    expect(style).toContain("248 113 113");
   });
 
   it("keeps the timer on the category colour above three seconds", () => {
