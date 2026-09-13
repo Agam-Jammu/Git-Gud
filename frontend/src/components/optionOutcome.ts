@@ -19,10 +19,10 @@ export function optionOutcome(
 export function optionOutcomeClass(outcome: OptionOutcome): string {
   switch (outcome) {
     case "correct":
-      return "border-arena-correct text-arena-correct";
+      return "border-arena-correct bg-arena-correct/10 text-arena-correct";
     case "chosen":
-      return "border-arena-wrong text-arena-wrong";
+      return "border-arena-wrong bg-arena-wrong/10 text-arena-wrong";
     default:
-      return "border-[color:rgb(var(--cat-accent-rgb)/0.22)] text-slate-400";
+      return "border-[color:rgb(var(--cat-accent-rgb)/0.22)] bg-[rgb(var(--cat-surface-rgb)/0.4)] text-slate-300";
   }
 }

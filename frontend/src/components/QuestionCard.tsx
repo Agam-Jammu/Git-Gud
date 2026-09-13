@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 
-import { fadeRise } from "../motion/presets";
+import { riseIn } from "../motion/presets";
 import { categoryStyle, categoryTheme } from "../theme/categoryTheme";
 import type { QuestionDto } from "../types";
 
@@ -17,14 +17,14 @@ const OPTION_BASE = "w-full rounded-md border px-4 py-3 text-left transition-col
 
 function optionClass(selected: boolean, locked: boolean): string {
   if (selected) {
-    return `${OPTION_BASE} border-[color:rgb(var(--cat-accent-rgb))] text-slate-100 shadow-[0_0_28px_-6px_rgb(var(--cat-accent-rgb)/0.8)]`;
+    return `${OPTION_BASE} border-[color:rgb(var(--cat-accent-rgb))] bg-[rgb(var(--cat-accent-rgb)/0.18)] text-slate-100 shadow-[0_0_28px_-6px_rgb(var(--cat-accent-rgb)/0.8)]`;
   }
 
   if (locked) {
-    return `${OPTION_BASE} border-[color:rgb(var(--cat-accent-rgb)/0.14)] text-slate-400 opacity-60`;
+    return `${OPTION_BASE} border-[color:rgb(var(--cat-accent-rgb)/0.14)] bg-[rgb(var(--cat-surface-rgb)/0.3)] text-slate-300 opacity-60`;
   }
 
-  return `${OPTION_BASE} border-[color:rgb(var(--cat-accent-rgb)/0.22)] text-slate-200 hover:border-[color:rgb(var(--cat-accent-rgb))]`;
+  return `${OPTION_BASE} border-[color:rgb(var(--cat-accent-rgb)/0.22)] bg-[rgb(var(--cat-surface-rgb)/0.4)] text-slate-200 hover:border-[color:rgb(var(--cat-accent-rgb))]`;
 }
 
 export function QuestionCard({ question, selectedOptionIndex, onSelect }: QuestionCardProps) {
@@ -34,7 +34,7 @@ export function QuestionCard({ question, selectedOptionIndex, onSelect }: Questi
     <motion.section
       className="cat-panel w-full max-w-2xl p-6"
       style={categoryStyle(categoryTheme(question.category))}
-      variants={fadeRise}
+      variants={riseIn}
       initial="hidden"
       animate="visible"
     >
@@ -78,7 +78,7 @@ export function QuestionCard({ question, selectedOptionIndex, onSelect }: Questi
       </ul>
 
       {locked ? (
-        <p className="mt-4 text-sm text-slate-400">Answer locked in. Waiting for the others...</p>
+        <p className="mt-4 text-sm text-slate-300">Answer locked in. Waiting for the others...</p>
       ) : null}
     </motion.section>
   );

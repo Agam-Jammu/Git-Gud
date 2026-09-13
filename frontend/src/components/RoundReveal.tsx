@@ -78,7 +78,7 @@ export function RoundReveal({
       ) : null}
 
       <section className="cat-panel w-full max-w-2xl p-6">
-        <h2 className="text-sm uppercase tracking-widest text-slate-400">Scoreboard</h2>
+        <h2 className="text-sm uppercase tracking-widest text-slate-300">Scoreboard</h2>
 
         <ol aria-label="Scoreboard" className="mt-4 flex flex-col gap-2">
           {scoreboard.map((player, index) => (

@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { fadeRise, liftOnHover } from "../motion/presets";
+import { fadeRise, liftOnHover, riseIn } from "../motion/presets";
 import { useGameSession } from "../session/useGameSession";
 
 const MAX_NAME_LENGTH = 20;
@@ -62,7 +62,7 @@ export function LobbyScreen() {
 
       <motion.div
         className="cat-panel flex w-full max-w-sm flex-col gap-6 p-6"
-        variants={fadeRise}
+        variants={riseIn}
         initial="hidden"
         animate="visible"
       >
@@ -96,7 +96,7 @@ export function LobbyScreen() {
         </motion.form>
 
         <motion.div
-          className="flex items-center gap-3 text-xs uppercase tracking-widest text-slate-400"
+          className="flex items-center gap-3 text-xs uppercase tracking-widest text-slate-300"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{

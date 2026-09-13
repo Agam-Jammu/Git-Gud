@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { fadeRise, liftOnHover } from "./presets";
+import { fadeRise, liftOnHover, riseIn } from "./presets";
 
 function visibleOf(variants: typeof fadeRise): Record<string, unknown> {
   return variants.visible as unknown as Record<string, unknown>;
@@ -18,6 +18,12 @@ describe("motion presets", () => {
 
   it("lands at its resting transform", () => {
     expect(visibleOf(fadeRise).y).toBe(0);
+  });
+
+  it("never fades riseIn so a glass surface keeps its backdrop filter", () => {
+    expect(riseIn.hidden).not.toHaveProperty("opacity");
+    expect(visibleOf(riseIn)).not.toHaveProperty("opacity");
+    expect(visibleOf(riseIn).y).toBe(0);
   });
 
   it("exposes hover and press gestures", () => {

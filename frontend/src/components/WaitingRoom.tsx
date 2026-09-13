@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { useState } from "react";
 
-import { fadeRise, liftOnHover } from "../motion/presets";
+import { fadeRise, liftOnHover, riseIn } from "../motion/presets";
 import type { PlayerDto } from "../types";
 
 const ROW_ENTRANCE_SECONDS = 0.38;
@@ -50,7 +50,7 @@ export function WaitingRoom({
 
       <motion.div
         className="cat-panel flex w-full max-w-sm items-center gap-2 p-3"
-        variants={fadeRise}
+        variants={riseIn}
         initial="hidden"
         animate="visible"
       >
@@ -72,12 +72,12 @@ export function WaitingRoom({
 
       <motion.section
         className="cat-panel w-full max-w-sm p-6"
-        variants={fadeRise}
+        variants={riseIn}
         initial="hidden"
         animate="visible"
       >
         <motion.h2
-          className="text-sm uppercase tracking-widest text-slate-400"
+          className="text-sm uppercase tracking-widest text-slate-300"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: ROW_ENTRANCE_SECONDS, ease: [0.16, 1, 0.3, 1] }}
@@ -106,7 +106,7 @@ export function WaitingRoom({
           ))}
         </ul>
 
-        {!connected ? <p className="mt-4 text-sm text-slate-400">Connecting to the room...</p> : null}
+        {!connected ? <p className="mt-4 text-sm text-slate-300">Connecting to the room...</p> : null}
 
         {error ? (
           <p role="alert" className="mt-4 text-sm text-arena-wrong">

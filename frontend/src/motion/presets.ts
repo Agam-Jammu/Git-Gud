@@ -9,6 +9,14 @@ export const fadeRise: Variants = {
   },
 };
 
+export const riseIn: Variants = {
+  hidden: { y: 16 },
+  visible: {
+    y: 0,
+    transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
 export const liftOnHover = {
   whileHover: { y: -3, scale: 1.02 },
   whileTap: { scale: 0.97 },

@@ -86,12 +86,12 @@ describe("arena", () => {
     expect(timer).toHaveClass("animate-pulse");
   });
 
-  it("starts hidden so the question animates in", () => {
+  it("keeps the arena frame free of fades so its glass keeps the backdrop filter", () => {
     renderArena();
 
     const style = screen.getByRole("main").getAttribute("style") ?? "";
 
-    expect(style).toContain("opacity: 0");
     expect(style).toContain("--cat-accent-rgb");
+    expect(style).not.toContain("opacity");
   });
 });

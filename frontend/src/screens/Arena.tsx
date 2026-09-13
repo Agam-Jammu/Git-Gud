@@ -17,12 +17,9 @@ export function Arena({ question, secondsRemaining, selectedOptionIndex, onSelec
   const urgent = secondsRemaining <= 3;
 
   return (
-    <motion.main
+    <main
       className="flex min-h-screen flex-col items-center justify-center gap-6 p-8"
       style={categoryStyle(categoryTheme(question.question.category))}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: ENTRANCE_SECONDS, ease: [0.16, 1, 0.3, 1] }}
     >
       <motion.header
         className="flex w-full max-w-2xl items-end justify-between"
@@ -54,6 +51,6 @@ export function Arena({ question, secondsRemaining, selectedOptionIndex, onSelec
         selectedOptionIndex={selectedOptionIndex}
         onSelect={onSelect}
       />
-    </motion.main>
+    </main>
   );
 }
