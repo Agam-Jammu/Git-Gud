@@ -1,3 +1,5 @@
+import { motion } from "motion/react";
+
 import { QuestionCard } from "../components/QuestionCard";
 import { categoryStyle, categoryTheme } from "../theme/categoryTheme";
 import type { QuestionStartPayload } from "../types";
@@ -9,15 +11,25 @@ export interface ArenaProps {
   onSelect: (optionIndex: number) => void;
 }
 
+const ENTRANCE_SECONDS = 0.4;
+
 export function Arena({ question, secondsRemaining, selectedOptionIndex, onSelect }: ArenaProps) {
   const urgent = secondsRemaining <= 3;
 
   return (
-    <main
+    <motion.main
       className="flex min-h-screen flex-col items-center justify-center gap-6 p-8"
       style={categoryStyle(categoryTheme(question.question.category))}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: ENTRANCE_SECONDS, ease: [0.16, 1, 0.3, 1] }}
     >
-      <header className="flex w-full max-w-2xl items-end justify-between">
+      <motion.header
+        className="flex w-full max-w-2xl items-end justify-between"
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: ENTRANCE_SECONDS, ease: [0.16, 1, 0.3, 1] }}
+      >
         <div>
           <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
             Question {question.questionNumber} of {question.totalQuestions}
@@ -35,13 +47,13 @@ export function Arena({ question, secondsRemaining, selectedOptionIndex, onSelec
         >
           {secondsRemaining}
         </p>
-      </header>
+      </motion.header>
 
       <QuestionCard
         question={question.question}
         selectedOptionIndex={selectedOptionIndex}
         onSelect={onSelect}
       />
-    </main>
+    </motion.main>
   );
 }

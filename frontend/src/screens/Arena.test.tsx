@@ -85,4 +85,13 @@ describe("arena", () => {
     expect(timer).toHaveClass("text-arena-wrong");
     expect(timer).toHaveClass("animate-pulse");
   });
+
+  it("starts hidden so the question animates in", () => {
+    renderArena();
+
+    const style = screen.getByRole("main").getAttribute("style") ?? "";
+
+    expect(style).toContain("opacity: 0");
+    expect(style).toContain("--cat-accent-rgb");
+  });
 });
